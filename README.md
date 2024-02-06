@@ -4,8 +4,8 @@
 This Tetris game project is being developed as part of the DEV4 course by Umut and Rayan from the D112 group. The project aims to implement a classic Tetris game using C++ and the Qt framework (for the GUI).
 
 ## Developers
-- **Rayan** (Matricule: 58923)
--  **Umut** (Matricule: 58620)
+- **Rayan** (matricule: **58923**)
+-  **Umut** (matricule: **58620**)
 
 ## Description
 Tetris is a classic puzzle game where the player arranges falling tetrominoes (shapes made up of four square blocks) to form complete rows. When a row is complete, it is cleared from the board, and the player earns points. The game ends when the stack of tetrominoes reaches the top of the playing area.
@@ -21,15 +21,10 @@ This project is currently in the modeling phase. Development will start soon.
 - Simple console-based user interface (GUI coming later)
 
 ## How to Play
-1. Clone or download the repository to your local machine.
-2. Compile the source code using a C++ compiler.
-3. Run the executable to start the game.
-4. Use the arrow keys to move and rotate the falling tetrominoes.
-5. Press the down arrow key to drop the tetromino faster.
-6. Try to complete as many rows as possible to score points and advance to higher levels.
+Coming soon...
 
 ## Development Environment
 - Language: C++
-- IDE: QtCreator and CLion
+- IDE: QtCreator
 - Compiler: GCC 13.2
 

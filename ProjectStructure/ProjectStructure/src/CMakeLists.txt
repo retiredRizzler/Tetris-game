@@ -9,11 +9,16 @@ add_executable(ProjectStructure
     ZPiece.cpp
     Piece.hpp
     Position.hpp
-    IPiece.cpp
+    LPiece.cpp
     TPiece.cpp
     JPiece.cpp
     SPiece.cpp
     SquarePiece.cpp
+    GameState.hpp
+    ConsoleView.hpp
+    PieceBag.h
+    PieceBag.cpp
+    LPiece.h
 
 )
 

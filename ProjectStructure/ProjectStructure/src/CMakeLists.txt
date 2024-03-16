@@ -27,6 +27,8 @@ add_executable(ProjectStructure
     SquarePiece.h
     JPiece.h
     TPiece.h
+    GameBoard.h
+    GameBoard.cpp
 
 )
 

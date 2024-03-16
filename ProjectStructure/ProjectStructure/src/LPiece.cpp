@@ -1,4 +1,3 @@
-#include "Piece.hpp"
+#include "LPiece.h"
 
-class LPiece : public Piece {
-};
+LPiece::LPiece() : Piece({{0, 0}, {1, 0}, {1, -1}, {1, -2}}) {}

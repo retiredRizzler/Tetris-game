@@ -1,8 +1,6 @@
 #ifndef POSITION_HPP
 #define POSITION_HPP
 
-#include <utility>
-
 class Position {
 private:
     int x;

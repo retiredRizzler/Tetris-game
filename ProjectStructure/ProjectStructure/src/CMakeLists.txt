@@ -7,7 +7,7 @@ add_executable(ProjectStructure
     MyClass.cpp
 
     ZPiece.cpp
-    Piece.hpp
+    Piece.h
     Position.hpp
     LPiece.cpp
     TPiece.cpp
@@ -19,6 +19,14 @@ add_executable(ProjectStructure
     PieceBag.h
     PieceBag.cpp
     LPiece.h
+    Piece.cpp
+    IPiece.h
+    IPiece.cpp
+    ZPiece.h
+    SPiece.h
+    SquarePiece.h
+    JPiece.h
+    TPiece.h
 
 )
 

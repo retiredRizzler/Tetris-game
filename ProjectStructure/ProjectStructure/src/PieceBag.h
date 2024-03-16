@@ -1,35 +1,28 @@
 #ifndef PIECEBAG_H
 #define PIECEBAG_H
+
 #include <vector>
-#include "Piece.hpp"
-#include "LPiece.h"
+#include "Piece.h"
 
-class PiecesBag {
-private:
-    std::vector<Piece> bag;
-    int currentIndex;
-
+class PieceBag {
 public:
-    // Constructor to initialize the bag with given size
-    PiecesBag(int size);
+    PieceBag(size_t size);
 
-    // Method to get the bag
+    // Get the current bag of pieces
     std::vector<Piece> getBag() const;
 
-    // Method to refill the bag if it's empty
+    // Refill the bag with new pieces
     void refill();
 
-    // Method to get the next piece from the bag
+    // Get the next piece from the bag
     Piece getNextPiece();
+
+private:
+    std::vector<Piece> bag; // Vector to store pieces in the bag
+    size_t bagSize; // Size of the bag
+
+    // Add a random piece to the bag
+    void addRandomPiece();
 };
-/*private:
-    std::vector<Piece*> bag;
-    int currentIndex;
 
-public:
-    PiecesBag(int size);
-    ~PiecesBag(); // Destructor to free memory
-
-    Piece* getNextPiece();
-};*/
 #endif // PIECEBAG_H

@@ -1,7 +1,7 @@
 #ifndef GAMESTATE_HPP
 #define GAMESTATE_HPP
 
-#include "Piece.hpp"
+#include "Piece.h"
 #include <memory>
 
 class GameState {

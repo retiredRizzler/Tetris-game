@@ -1,9 +1,4 @@
-#include "Piece.hpp"
+#include "SquarePiece.h"
 
-class SquarePiece : public Piece {
-public:
-    // Implémentation de la rotation spécifique pour cette pièce
-    virtual void rotate() override {
-        return;
-    }
-};
+SquarePiece::SquarePiece() : Piece({{0, 0}, {0, 1}, {1, 0}, {1, 1}}) {
+}

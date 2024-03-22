@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 
-add_executable(ProjectStructure
+add_executable(Tetris_project
     main.cpp
     MyClass.h
     MyClass.cpp
@@ -32,5 +32,5 @@ add_executable(ProjectStructure
 
 )
 
-install(TARGETS ProjectStructure
+install(TARGETS Tetris_project
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})

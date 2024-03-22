@@ -2,27 +2,26 @@
 #define PIECEBAG_H
 
 #include <vector>
-#include "Piece.h"
+#include <memory>
+#include "Piece.h" // Assuming Piece.h is implemented
 
 class PieceBag {
 public:
     PieceBag(size_t size);
 
-    // Get the current bag of pieces
-    std::vector<Piece> getBag() const;
+    // Get a const reference to the current bag contents (avoid modification)
+    const std::vector<std::shared_ptr<Piece>>& getBag() const;
 
     // Refill the bag with new pieces
     void refill();
 
-    // Get the next piece from the bag
-    Piece getNextPiece();
+    // Get the next piece from the bag (shared ownership)
+    std::shared_ptr<Piece> getNextPiece();
 
 private:
-    std::vector<Piece> bag; // Vector to store pieces in the bag
-    size_t bagSize; // Size of the bag
-
-    // Add a random piece to the bag
-    void addRandomPiece();
+    std::vector<std::shared_ptr<Piece>> bag;
+    size_t bagSize;
+    void addRandomPiece(); // Helper method
 };
 
 #endif // PIECEBAG_H

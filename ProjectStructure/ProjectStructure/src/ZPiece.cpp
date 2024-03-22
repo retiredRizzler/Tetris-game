@@ -1,3 +1,4 @@
 #include "Piece.h"
-class ZPiece : public Piece {
-};
+#include "ZPiece.h"
+
+ZPiece::ZPiece() : Piece({{0, 0}, {0, 1}, {1, 1}, {1, 2}}) {}

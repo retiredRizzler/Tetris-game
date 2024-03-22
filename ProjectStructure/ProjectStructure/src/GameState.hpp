@@ -2,27 +2,30 @@
 #define GAMESTATE_HPP
 
 #include "Piece.h"
-#include <memory>
+#include "PieceBag.h" // Include PieceBag.h
 
 class GameState {
 private:
     int score;
-    Piece currentPiece;
+    std::shared_ptr<Piece> currentPiece; // Use unique_ptr for current piece ownership
     int currentLevel;
-    Piece nextPiece;
-    bool game_over;
+    std::shared_ptr<Piece> nextPiece; // Use shared_ptr for next piece (potential preview)
+    bool gameOver;
 
 public:
-    // Constructeur prenant les valeurs initiales
-    GameState(int score, const Piece& currentPiece, int currentLevel, const Piece& nextPiece)
-        : score(score), currentPiece(currentPiece), currentLevel(currentLevel), game_over(false),nextPiece(nextPiece) {}
+    // Constructor (consider using PieceBag for next piece)
+    GameState(int score, std::shared_ptr<Piece> currentPiece, int currentLevel, PieceBag& pieceBag)
+        : score(score), currentPiece(std::move(currentPiece)), currentLevel(currentLevel) {
+        nextPiece = pieceBag.getNextPiece(); // Get next piece from PieceBag
+        gameOver = false;
+    }
 
-    // Accesseurs
+    // Accesseurs (modify return types if needed)
     int getScore() const {
         return score;
     }
 
-    Piece getCurrentPiece() const {
+    const std::shared_ptr<Piece>& getCurrentPiece() const {
         return currentPiece;
     }
 
@@ -30,29 +33,31 @@ public:
         return currentLevel;
     }
 
-    Piece getNextPiece() const {
+    const std::shared_ptr<Piece>& getNextPiece() const {
         return nextPiece;
     }
 
     bool isGameOver() const {
-        return game_over;
+        return gameOver;
     }
 
-    // Mutateurs
+    // Mutators
     void setScore(int score) {
         this->score = score;
     }
 
-    void setCurrentPiece(const Piece& piece) {
-        currentPiece = piece;
-    }
-
-    void setNextPiece(const Piece& piece) {
-        nextPiece = piece;
+    // Consider separate method to update current piece using PieceBag
+    void updateCurrentPiece(PieceBag& pieceBag) {
+        currentPiece = std::move(pieceBag.getNextPiece()); // Get next piece and transfer ownership
+        nextPiece = pieceBag.getNextPiece(); // Update next piece for preview (optional)
     }
 
     void setCurrentLevel(int level) {
         currentLevel = level;
+    }
+
+    void setGameOver(bool isOver) {
+        gameOver = isOver;
     }
 };
 

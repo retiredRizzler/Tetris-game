@@ -7,10 +7,8 @@ private:
     int y;
 
 public:
-    // Constructeur prenant les coordonnées x et y
-    Position(int x_val, int y_val) : x(x_val), y(y_val) {}
+    Position(int xVal, int yVal) : x(xVal), y(yVal) {}
 
-    // Accesseurs pour obtenir les coordonnées x et y
     int getX() const {
         return x;
     }
@@ -19,16 +17,14 @@ public:
         return y;
     }
 
-    // Méthode pour définir les coordonnées x et y
-    void setX(int x_val) {
-        x = x_val;
+    void setX(int xVal) {
+        x = xVal;
     }
 
-    void setY(int y_val) {
-        y = y_val;
+    void setY(int yVal) {
+        y = yVal;
     }
 
-    // Méthode pour déplacer la position par un décalage donné
     void moveBy(int dx, int dy) {
         x += dx;
         y += dy;

@@ -21,7 +21,7 @@ public:
     void setPieceAt(int row, int col, const std::shared_ptr<Piece>& piece);
 
     bool isInsideBoard(int row, int col) const; // Helper function
-    bool checkCollision(const std::shared_ptr<Piece>& piece, int row, int col) const;
+    bool isColliding(const std::shared_ptr<Piece>& piece, int row, int col) const;
     void clearCompletedLines();
 };
 

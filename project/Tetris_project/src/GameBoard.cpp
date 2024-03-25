@@ -1,4 +1,5 @@
 #include "GameBoard.h"
+#include <algorithm>
 
 GameBoard::GameBoard(int rows, int cols) : rows(rows), cols(cols) {
     board.resize(rows, std::vector<std::shared_ptr<Piece>>(cols, nullptr));
@@ -30,18 +31,58 @@ bool GameBoard::isInsideBoard(int row, int col) const {
     return row >= 0 && row < rows && col >= 0 && col < cols;
 }
 
-bool GameBoard::checkCollision(const std::shared_ptr<Piece>& piece, int row, int col) const {
+bool GameBoard::isColliding(const std::shared_ptr<Piece>& piece, int row, int col) const {
     // Check if any block of the piece would collide with an occupied space on the board
     for (const Position& pos : piece->getAbsolutePositions()) {
-        int absoluteRow = pos.getX() + row;
-        int absoluteCol = pos.getY() + col;
-        if (!isInsideBoard(absoluteRow, absoluteCol) || getPieceAt(absoluteRow, absoluteCol) != nullptr) {
+        int nextRow = pos.getX() + row;
+        int nextCol = pos.getY() + col;
+        if (!isInsideBoard(nextRow, nextCol) || getPieceAt(nextRow, nextCol) != nullptr) {
             return true;
         }
     }
     return false;
 }
 
-void GameBoard::clearCompletedLines() {
+std::vector<int> GameBoard::clearCompletedLines() {
+    // 1. Identify completed lines
+    std::vector<int> completedRows;
+    for (int row = 0; row < rows; ++row) {
+        bool isCompleted = true;
+        for (int col = 0; col < cols; ++col) {
+            if (getPieceAt(row, col) == nullptr) {
+                isCompleted = false;
+                break;
+            }
+        }
+        if (isCompleted) {
+            completedRows.push_back(row);
+        }
+    }
 
+    // 2. Remove completed lines and shift pieces down
+    if (!completedRows.empty()) {
+        int numClearedLines = completedRows.size();
+        for (int clearedRow = rows - 1; clearedRow >= 0; --clearedRow) {
+            if (std::find(completedRows.begin(), completedRows.end(), clearedRow) != completedRows.end()) {
+                // Clear completed row
+                for (int col = 0; col < cols; ++col) {
+                    setPieceAt(clearedRow, col, nullptr);
+                }
+
+                // Shift down remaining pieces above the cleared row
+                for (int row = clearedRow - 1; row >= 0; --row) {
+                    for (int col = 0; col < cols; ++col) {
+                        auto piece = getPieceAt(row, col);
+                        if (piece != nullptr) {
+                            // Move piece down one row
+                            setPieceAt(row, col, nullptr);
+                            setPieceAt(row + numClearedLines, col, piece);
+                        }
+                    }
+                    numClearedLines++; // Adjust number of cleared lines for shifting
+                }
+            }
+        }
+    }
+    return completedRows;
 }

@@ -14,7 +14,7 @@ add_executable(Tetris_project
     JPiece.cpp
     SPiece.cpp
     SquarePiece.cpp
-    GameState.hpp
+
     ConsoleView.hpp
     PieceBag.h
     PieceBag.cpp
@@ -29,6 +29,10 @@ add_executable(Tetris_project
     TPiece.h
     GameBoard.h
     GameBoard.cpp
+    GameSate.h
+    GameState.cpp
+
+
 
 )
 

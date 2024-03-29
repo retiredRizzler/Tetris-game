@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <memory>
-#include "Piece.h" // Assuming Piece.h is implemented
+#include "pieces/Piece.h" // Assuming Piece.h is implemented
 
 class PieceBag {
 public:
@@ -15,13 +15,13 @@ public:
     // Refill the bag with new pieces
     void refill();
 
-    // Get the next piece from the bag (shared ownership)
+    // Get the next piece from the bag
     std::shared_ptr<Piece> getNextPiece();
 
 private:
     std::vector<std::shared_ptr<Piece>> bag;
     size_t bagSize;
-    void addRandomPiece(); // Helper method
+    void addRandomPiece();
 };
 
 #endif // PIECEBAG_H

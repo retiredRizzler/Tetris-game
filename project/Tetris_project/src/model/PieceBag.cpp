@@ -2,14 +2,14 @@
 #include <memory>
 #include <vector>
 #include <cstdlib>
-#include "Piece.h"
-#include "IPiece.h"
-#include "ZPiece.h"
-#include "JPiece.h"
-#include "LPiece.h"
-#include "SquarePiece.h"
-#include "SPiece.h"
-#include "TPiece.h"
+#include "pieces/Piece.h"
+#include "pieces/IPiece.h"
+#include "pieces/ZPiece.h"
+#include "pieces/JPiece.h"
+#include "pieces/LPiece.h"
+#include "pieces/SquarePiece.h"
+#include "pieces/SPiece.h"
+#include "pieces/TPiece.h"
 
 PieceBag::PieceBag(size_t size) : bagSize(size) {
     refill();

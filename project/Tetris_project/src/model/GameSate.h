@@ -29,4 +29,4 @@ public:
     void setGameOver(bool isOver);
 };
 
-#endif // GAMESTATE_H
+#endif

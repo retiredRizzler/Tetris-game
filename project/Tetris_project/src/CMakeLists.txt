@@ -3,34 +3,33 @@ cmake_minimum_required(VERSION 3.5)
 
 add_executable(Tetris_project
     main.cpp
-    MyClass.h
-    MyClass.cpp
 
-    ZPiece.cpp
-    Piece.h
-    Position.hpp
-    LPiece.cpp
-    TPiece.cpp
-    JPiece.cpp
-    SPiece.cpp
-    SquarePiece.cpp
+    model/pieces/ZPiece.cpp
+    model/pieces/Piece.h
+    model/Position.hpp
+    model/pieces/LPiece.cpp
+    model/pieces/TPiece.cpp
+    model/pieces/JPiece.cpp
+    model/pieces/SPiece.cpp
+    model/pieces/SquarePiece.cpp
 
-    ConsoleView.hpp
-    PieceBag.h
-    PieceBag.cpp
-    LPiece.h
-    Piece.cpp
-    IPiece.h
-    IPiece.cpp
-    ZPiece.h
-    SPiece.h
-    SquarePiece.h
-    JPiece.h
-    TPiece.h
-    GameBoard.h
-    GameBoard.cpp
-    GameSate.h
-    GameState.cpp
+    view/ConsoleView.hpp
+    model/PieceBag.h
+    model/PieceBag.cpp
+    model/pieces/LPiece.h
+    model/pieces/Piece.cpp
+    model/pieces/IPiece.h
+    model/pieces/IPiece.cpp
+    model/pieces/ZPiece.h
+    model/pieces/SPiece.h
+    model/pieces/SquarePiece.h
+    model/pieces/JPiece.h
+    model/pieces/TPiece.h
+    model/GameBoard.h
+    model/GameBoard.cpp
+    model/GameSate.h
+    model/GameState.cpp
+
 
 
 

@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <memory>
-#include "Piece.h"
+#include "pieces/Piece.h"
 
 class GameBoard {
 private:
@@ -22,7 +22,7 @@ public:
 
     bool isInsideBoard(int row, int col) const; // Helper function
     bool isColliding(const std::shared_ptr<Piece>& piece, int row, int col) const;
-    void clearCompletedLines();
+    std::vector<int> clearCompletedLines();
 };
 
 #endif // GAMEBOARD_H

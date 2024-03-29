@@ -1,11 +1,34 @@
 cmake_minimum_required(VERSION 3.5)
 
-add_executable(ProjectStructureTests
+add_executable(Tetris_projectTests
+    ../src/model/PieceBag.h
+    ../src/model/PieceBag.cpp
+    ../src/model/pieces/ZPiece.cpp
+    ../src/model/pieces/Piece.h
+    ../src/model/Position.hpp
+    ../src/model/pieces/LPiece.cpp
+    ../src/model/pieces/TPiece.cpp
+    ../src/model/pieces/JPiece.cpp
+    ../src/model/pieces/SPiece.cpp
+    ../src/model/pieces/SquarePiece.cpp
+    ../src/model/pieces/LPiece.h
+    ../src/model/pieces/Piece.cpp
+    ../src/model/pieces/IPiece.h
+    ../src/model/pieces/IPiece.cpp
+    ../src/model/pieces/ZPiece.h
+    ../src/model/pieces/SPiece.h
+    ../src/model/pieces/SquarePiece.h
+    ../src/model/pieces/JPiece.h
+    ../src/model/pieces/TPiece.h
+    ../src/model/GameBoard.h
+    ../src/model/GameBoard.cpp
+    ../src/model/GameSate.h
+    ../src/model/GameState.cpp
 
-    testMyClass.cpp
-    ../src/MyClass.cpp
+    testGameBoard.cpp
+    testPieceBag.cpp
 )
-target_include_directories(ProjectStructureTests PRIVATE
+target_include_directories(Tetris_projectTests PRIVATE
     ../src
 )
 
@@ -20,4 +43,4 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Catch2)
 #list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 
-target_link_libraries(ProjectStructureTests Catch2::Catch2WithMain)
+target_link_libraries(Tetris_projectTests Catch2::Catch2WithMain)

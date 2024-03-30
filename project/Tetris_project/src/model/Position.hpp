@@ -29,6 +29,9 @@ public:
         x += dx;
         y += dy;
     }
+    bool operator==(const Position& other) const {
+        return x == other.x && y == other.y;
+    }
 };
 
 #endif // POSITION_HPP

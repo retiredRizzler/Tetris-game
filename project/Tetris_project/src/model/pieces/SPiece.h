@@ -7,6 +7,8 @@
 class SPiece : public Piece {
 public:
     SPiece();
+    bool operator==(const Piece& other) const override;
+
 };
 
 #endif // SPIECE_H

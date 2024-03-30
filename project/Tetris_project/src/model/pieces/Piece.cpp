@@ -15,13 +15,25 @@ std::vector<Position> Piece::getAbsolutePositions() const {
     return absolutePositions;
 }
 
+// Helper function to create a rotation matrix for rotation
+std::vector<std::vector<int>> getRotationMatrix() {
+    return {{0, 1}, {-1, 0}};
+}
+
+
 void Piece::rotate() {
     std::vector<Position> rotatedShape;
+    std::vector<std::vector<int>> rotationMatrix = getRotationMatrix();
+
     for (const auto& square : shape) {
-        rotatedShape.push_back({-square.getY(), square.getX()});
+        int newX = rotationMatrix[0][0] * square.getX() + rotationMatrix[0][1] * square.getY();
+        int newY = rotationMatrix[1][0] * square.getX() + rotationMatrix[1][1] * square.getY();
+        rotatedShape.push_back({newX, newY});
     }
+
     shape = rotatedShape;
 }
+
 
 void Piece::moveDown() {
     row++;
@@ -34,3 +46,22 @@ void Piece::moveLeft() {
 void Piece::moveRight() {
     col++;
 }
+
+int Piece::getRow() {
+    return row;
+}
+
+int Piece::getCol() {
+    return col;
+}
+
+std::vector<Position>& Piece::getShape() {
+    return shape;
+}
+
+bool Piece::operator==(const Piece& other) const {
+    const Piece* otherPiece = dynamic_cast<const Piece*>(&other);
+    return otherPiece != nullptr && shape == otherPiece->shape;
+}
+
+

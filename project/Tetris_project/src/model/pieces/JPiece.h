@@ -6,6 +6,8 @@
 class JPiece : public Piece {
 public:
     JPiece();
+    bool operator==(const Piece& other) const override;
+
 };
 
 #endif // JPIECE_H

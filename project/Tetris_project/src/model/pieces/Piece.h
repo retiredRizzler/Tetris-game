@@ -14,9 +14,15 @@ public:
     virtual void moveDown();
     virtual void moveLeft();
     virtual void moveRight();
+    virtual int getRow();
+    virtual int getCol();
+    std::vector<Position>& getShape();
+    virtual bool operator==(const Piece& other) const;
+
+protected:
+    std::vector<Position> shape;
 
 private:
-    std::vector<Position> shape;
     int row;
     int col;
 };

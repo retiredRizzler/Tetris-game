@@ -6,5 +6,7 @@
 class IPiece : public Piece {
 public:
     IPiece();
+    bool operator==(const Piece& other) const override;
+
 };
 #endif // IPIECE_H

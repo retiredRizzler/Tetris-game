@@ -27,6 +27,7 @@ add_executable(Tetris_projectTests
 
     testGameBoard.cpp
     testPieceBag.cpp
+    testPiece.cpp
 )
 target_include_directories(Tetris_projectTests PRIVATE
     ../src

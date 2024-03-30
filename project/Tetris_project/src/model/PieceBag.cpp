@@ -20,15 +20,15 @@ const std::vector<std::shared_ptr<Piece>>& PieceBag::getBag() const {
 }
 
 void PieceBag::refill() {
-    bag.clear(); // Clear existing bag contents before refilling
+    bag.clear();
     for (size_t i = 0; i < bagSize; ++i) {
-        addRandomPiece(); // Add random piece types to the bag
+        addRandomPiece();
     }
 }
 
 std::shared_ptr<Piece> PieceBag::getNextPiece() {
     if (bag.empty()) {
-        refill(); // Refill if the bag is empty
+        refill();
     }
     std::shared_ptr<Piece> nextPiece = bag.front();
     bag.erase(bag.begin()); // Remove the used piece from the front

@@ -18,6 +18,8 @@ public:
     virtual int getRow();
     virtual int getCol();
     std::vector<Position>& getShape();
+    std::vector<std::vector<int>> getRotationMatrix();
+    void negateMatrix(std::vector<std::vector<int>>& matrix);
     virtual bool operator==(const Piece& other) const;
 
 protected:
@@ -26,7 +28,7 @@ protected:
 private:
     int row;
     int col;
-    std::vector<std::vector<int>> getRotationMatrix();
+    void rotate(const std::vector<std::vector<int>>& rotationMatrix);
 };
 
 #endif // PIECE_H

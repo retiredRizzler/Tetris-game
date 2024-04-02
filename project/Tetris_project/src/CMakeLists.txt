@@ -27,7 +27,7 @@ add_executable(Tetris_project
     model/pieces/TPiece.h
     model/GameBoard.h
     model/GameBoard.cpp
-    model/GameState.h
+    model/GameSate.h
     model/GameState.cpp
     model/TetrisModel.h model/TetrisModel.cpp
 

@@ -2,11 +2,9 @@
 #define CONSOLEVIEW_HPP
 
 #include "../model/GameBoard.h"
-#include "../model/GameSate.h";
+#include "../model/GameSate.h"
 #include <iostream>
 #include <string>
-
-
 
 class ConsoleView {
 public:

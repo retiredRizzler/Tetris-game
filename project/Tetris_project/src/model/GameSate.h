@@ -10,7 +10,6 @@ private:
     std::shared_ptr<Piece> currentPiece;
     int currentLevel;
     std::shared_ptr<Piece> nextPiece;
-    bool gameOver;
 
 public:
     GameState(int score, std::shared_ptr<Piece> currentPiece, int currentLevel);
@@ -20,13 +19,11 @@ public:
     const std::shared_ptr<Piece>& getCurrentPiece() const;
     int getCurrentLevel() const;
     const std::shared_ptr<Piece>& getNextPiece() const;
-    bool isGameOver() const;
 
     // Setters
-    void setScore(int score);
+    void incrementScore(int score);
     void updateCurrentPiece(PieceBag& pieceBag);
-    void setCurrentLevel(int level);
-    void setGameOver(bool isOver);
+    void incrementCurrentLevel(int level);
 };
 
 #endif

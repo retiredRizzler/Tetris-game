@@ -20,38 +20,36 @@ std::vector<std::vector<int>> Piece::getRotationMatrix() {
     return {{0, 1}, {-1, 0}};
 }
 
+// Helper method to negate the rotation matrix
+void Piece::negateMatrix(std::vector<std::vector<int>>& matrix) {
+    for (int i = 0; i < matrix.size(); ++i) {
+        for (int j = 0; j < matrix[i].size(); ++j) {
+            matrix[i][j] *= -1;
+        }
+    }
+}
 
-void Piece::rotateClockwise() {
+void Piece::rotate(const std::vector<std::vector<int>>& rotationMatrix) {
     std::vector<Position> rotatedShape;
-    std::vector<std::vector<int>> rotationMatrix = getRotationMatrix();// source : Gemini (google AI)
-
-    //still have to test it for some specific "pieces
     for (const auto& square : shape) {
+        //formula with rotation matrix taken from Gemini (Google AI)
         int newX = rotationMatrix[0][0] * square.getX() + rotationMatrix[0][1] * square.getY();
         int newY = rotationMatrix[1][0] * square.getX() + rotationMatrix[1][1] * square.getY();
         rotatedShape.push_back({newX, newY});
     }
-
     shape = rotatedShape;
 }
 
-void Piece::rotateCounterClockwise() {
-    // Negate the existing rotation matrix to achieve counter-clockwise rotation
+void Piece::rotateClockwise() {
     std::vector<std::vector<int>> rotationMatrix = getRotationMatrix();
-    for (int i = 0; i < 2; ++i) {
-        for (int j = 0; j < 2; ++j) {
-            rotationMatrix[i][j] *= -1;
-        }
-    }
+    rotate(rotationMatrix);
+}
 
-    std::vector<Position> rotatedShape;
-    for (const auto& square : shape) {
-        int newX = rotationMatrix[0][0] * square.getX() + rotationMatrix[0][1] * square.getY();
-        int newY = rotationMatrix[1][0] * square.getX() + rotationMatrix[1][1] * square.getY();
-        rotatedShape.push_back({newX, newY});
-    }
-
-    shape = rotatedShape;
+void Piece::rotateCounterClockwise() {
+    // Get the rotation matrix, negate it, and then use rotate
+    std::vector<std::vector<int>> rotationMatrix = getRotationMatrix();
+    negateMatrix(rotationMatrix);
+    rotate(rotationMatrix);
 }
 
 

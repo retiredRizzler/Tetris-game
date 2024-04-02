@@ -30,7 +30,7 @@ void GameBoard::setPieceAt(int row, int col, const std::shared_ptr<Piece>& piece
 }
 
 bool GameBoard::isInsideBoard(int row, int col) const {
-    return row >= 0 && row < rows && col >= 0 && col < cols;
+    return (row >= 0 && row <= rows) && (col >= 0 && col <= cols);
 }
 
 std::vector<Position> GameBoard::getOccupiedPositions() const {
@@ -49,30 +49,39 @@ std::vector<Position> GameBoard::getOccupiedPositions() const {
 
     return occupiedPositions;
 }
+//Compare in the occupied positions if we have same rows as the size of the board's column so we identify completed lines
+std::vector<int> GameBoard::findCompletedLines() const {
+    std::vector<int> completedRows;
+    std::vector<Position> occupiedPositions = getOccupiedPositions();
+
+    // Count occupied positions in each row
+    std::vector<int> rowOccupationCount(rows, 0); // Initialize with 0 occupied positions per row
+    for (const auto& pos : occupiedPositions) {
+        rowOccupationCount[pos.getX()]++; // Increment count for the occupied position's row
+    }
+
+    // Identify completed rows based on occupation count
+    for (int row = 0; row < rows; ++row) {
+        if (rowOccupationCount[row] == cols) {
+            completedRows.push_back(row);
+        }
+    }
+
+    return completedRows;
+}
 
 /**
  * @brief Clears completed lines and shifts pieces down.
  * @return A vector containing the indices of the cleared rows.
  */
-std::vector<int> GameBoard::clearCompletedLines() {
+int GameBoard::clearCompletedLines() {
     // 1. Identify completed lines
-    std::vector<int> completedRows;
-    for (int row = 0; row < rows; ++row) {
-        bool isCompleted = true;
-        for (int col = 0; col < cols; ++col) {
-            if (getPieceAt(row, col) == nullptr) {
-                isCompleted = false;
-                break;
-            }
-        }
-        if (isCompleted) {
-            completedRows.push_back(row);
-        }
-    }
+    std::vector<int> completedRows = findCompletedLines();
+
 
     // 2. Remove completed lines and shift pieces down
     if (!completedRows.empty()) {
-        int nbClearedLines = completedRows.size(); //Very important to keep track of the number of rows to shift down the piece
+        int nbClearedLines = completedRows.size(); //Very important to keep track of the number of completed rows to shift down the piece
         for (int clearedRow = rows - 1; clearedRow >= 0; --clearedRow) {
             if (std::find(completedRows.begin(), completedRows.end(), clearedRow) != completedRows.end()) {
                 // Clear completed row
@@ -95,5 +104,5 @@ std::vector<int> GameBoard::clearCompletedLines() {
             }
         }
     }
-    return completedRows;
+    return completedRows.size();
 }

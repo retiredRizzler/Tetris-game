@@ -16,12 +16,20 @@ public:
     void movePieceDown();
     void dropPiece();
     void rotatePiece(char dir);
+    void updateGame();
+    GameState& getState();
+    GameBoard& getBoard();
+    PieceBag& getBag();
 
 private:
     GameBoard board;
     PieceBag bag;
     GameState state;
+    int totalCompletedLine;
+    int dropScore;
+    bool canMoveDown();
     bool isColliding(const std::shared_ptr<Piece>& piece, int row, int col) const;
+    void updateScore(int completedLine);
 };
 
 

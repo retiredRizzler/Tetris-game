@@ -23,7 +23,8 @@ public:
     bool isInsideBoard(int row, int col) const; // Helper function
     std::vector<Position> getOccupiedPositions() const;
     bool isColliding(const std::shared_ptr<Piece>& piece, int row, int col) const;
-    std::vector<int> clearCompletedLines();
+    std::vector<int> findCompletedLines() const;
+    int clearCompletedLines();
 };
 
 #endif // GAMEBOARD_H

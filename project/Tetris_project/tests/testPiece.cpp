@@ -38,46 +38,46 @@ TEST_CASE("move") {
 }
 
 
-TEST_CASE("rotate") {
+TEST_CASE("rotateClockwise") {
     SECTION("IPiece Rotation") {
         IPiece piece;
 
-        piece.rotate();
-        std::vector<Position> expectedRotated = {{0, 0}, {1, 0}, {-1, 0}, {-2, 0}};
-        REQUIRE(piece.getShape() == expectedRotated);
+        piece.rotateClockwise();
+        std::vector<Position> expectedrotateClockwised = {{0, 0}, {1, 0}, {-1, 0}, {-2, 0}};
+        REQUIRE(piece.getShape() == expectedrotateClockwised);
 
-        piece.rotate(); // Rotate again for second rotation
-        expectedRotated = {{0, 0}, {0, -1}, {0, 1}, {0, 2}};
-        REQUIRE(piece.getShape() == expectedRotated);
+        piece.rotateClockwise(); // rotateClockwise again for second rotation
+        expectedrotateClockwised = {{0, 0}, {0, -1}, {0, 1}, {0, 2}};
+        REQUIRE(piece.getShape() == expectedrotateClockwised);
 
-        piece.rotate();
-        expectedRotated = {{0, 0}, {-1, 0}, {1, 0}, {2, 0}};
-        REQUIRE(piece.getShape() == expectedRotated);
+        piece.rotateClockwise();
+        expectedrotateClockwised = {{0, 0}, {-1, 0}, {1, 0}, {2, 0}};
+        REQUIRE(piece.getShape() == expectedrotateClockwised);
 
 
-        piece.rotate(); // Rotate again for fourth rotation (back to original)
-        expectedRotated = {{0, 0}, {0, 1}, {0, -1}, {0, -2}};
-        REQUIRE(piece.getShape() == expectedRotated);
+        piece.rotateClockwise(); // rotateClockwise again for fourth rotation (back to original)
+        expectedrotateClockwised = {{0, 0}, {0, 1}, {0, -1}, {0, -2}};
+        REQUIRE(piece.getShape() == expectedrotateClockwised);
     }
 
     SECTION("ZPiece rotation") {
         ZPiece piece;
 
-        piece.rotate();
-        std::vector<Position> expectedRotated = {{0, 0}, {0, 1}, {-1, 0}, {-1, -1}};
-        REQUIRE(piece.getShape() == expectedRotated);
+        piece.rotateClockwise();
+        std::vector<Position> expectedrotateClockwised = {{0, 0}, {0, 1}, {-1, 0}, {-1, -1}};
+        REQUIRE(piece.getShape() == expectedrotateClockwised);
 
-        piece.rotate();
-        expectedRotated = {{0, 0}, {1, 0}, {0, 1}, {-1, 1}};
-        REQUIRE(piece.getShape() == expectedRotated);
+        piece.rotateClockwise();
+        expectedrotateClockwised = {{0, 0}, {1, 0}, {0, 1}, {-1, 1}};
+        REQUIRE(piece.getShape() == expectedrotateClockwised);
 
-        piece.rotate();
-        expectedRotated = {{0, 0}, {0, -1}, {1, 0}, {1, 1}};
-        REQUIRE(piece.getShape() == expectedRotated);
+        piece.rotateClockwise();
+        expectedrotateClockwised = {{0, 0}, {0, -1}, {1, 0}, {1, 1}};
+        REQUIRE(piece.getShape() == expectedrotateClockwised);
 
-        piece.rotate();
-        expectedRotated = {{0, 0}, {-1, 0}, {0, -1}, {1, -1}};
-        REQUIRE(piece.getShape() == expectedRotated);
+        piece.rotateClockwise();
+        expectedrotateClockwised = {{0, 0}, {-1, 0}, {0, -1}, {1, -1}};
+        REQUIRE(piece.getShape() == expectedrotateClockwised);
 
     }
 }

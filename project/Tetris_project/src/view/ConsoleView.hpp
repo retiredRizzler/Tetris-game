@@ -1,9 +1,12 @@
 #ifndef CONSOLEVIEW_HPP
 #define CONSOLEVIEW_HPP
 
+#include "../model/GameBoard.h"
+#include "../model/GameSate.h";
 #include <iostream>
-//#include "GameBoard.hpp"
-#include "GameState.hpp"
+#include <string>
+
+
 
 class ConsoleView {
 public:
@@ -12,24 +15,50 @@ public:
         std::cout << "Welcome to the game!" << std::endl;
     }
 
-    // Method to display the game board
-/*    static void displayBoard(const GameBoard& board) {
+    static void displayBoard(const GameBoard& board) {
+        for (int i = 0; i < board.getCols() + 2; ++i) {
+            std::cout << "#";
+        }
+        std::cout << std::endl;
 
-    }*/
+        for (int row = 0; row < board.getRows(); ++row) {
+            std::cout << "#";
+            for (int col = 0; col < board.getCols(); ++col) {
+                bool hasPiece = false;
+
+                // Check for overlapping pieces and print "X" for any occupied space
+                for (int r = 0; r < board.getRows(); ++r) {
+                    for (int c = 0; c < board.getCols(); ++c) {
+                        auto piece = board.getPieceAt(r, c);
+                        if (piece != nullptr) {
+                            for (const auto& pos : piece->getAbsolutePositions()) {
+                                if (pos.getX() == row && pos.getY() == col) {
+                                    hasPiece = true;
+                                    std::cout << "X";
+                                    break; // Exit inner loop if position found
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!hasPiece) {
+                    std::cout << " "; // Empty space
+                }
+            }
+            std::cout << "#" << std::endl;
+        }
+        for (int i = 0; i < board.getCols() + 2; ++i) {
+            std::cout << "#";
+        }
+        std::cout << std::endl;
+    }
+
+
+
 
     // Method to display the current level
     static void displayLevel(const GameState& state) {
         std::cout << "Current Level: " << state.getCurrentLevel() << std::endl;
-    }
-
-    // Method to display the current piece
-    static void displayCurrentPiece(const GameState& state) {
-        // Implémentation à ajouter car Piece ne peux pas être afficher
-    }
-
-    // Method to display the next piece
-    static void displayNextPiece(const GameState& state) {
-        // Implémentation à ajouter car Piece ne peux pas être afficher
     }
 
      // Method to display the score

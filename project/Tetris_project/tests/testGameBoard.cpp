@@ -2,6 +2,7 @@
 #include "model/GameBoard.h"
 #include "model/pieces/TPiece.h"
 #include "model/pieces/IPiece.h"
+#include "model/pieces/ZPiece.h"
 
 TEST_CASE( "Test of the isInsideBoard function") {
 
@@ -20,39 +21,25 @@ TEST_CASE( "Test of the isInsideBoard function") {
 }
 
 TEST_CASE("GameBoard: setPieceAt and getPieceAt") {
-    GameBoard board(4, 4);
-
-    std::shared_ptr<Piece> testPiece = std::make_shared<Piece>(TPiece());
-
-    board.setPieceAt(1, 2, testPiece);
-    std::shared_ptr<Piece> retrievedPiece = board.getPieceAt(1, 2);
-
-    REQUIRE(retrievedPiece != nullptr);
-    REQUIRE(*retrievedPiece == *testPiece); // Check for piece type (assuming appropriate comparison)
-}
-
-TEST_CASE("GameBoard: isColliding") {
-    GameBoard board(4, 4);
-
-    std::shared_ptr<Piece> testPiece = std::make_shared<Piece>(IPiece());
-
-    SECTION("No Collision - Empty Board") {
-        REQUIRE(board.isColliding(testPiece, 2, 2) == false);
-    }
-
-    SECTION("Collision with Existing Piece") {
-        board.setPieceAt(1, 1, testPiece);
-        REQUIRE(board.isColliding(testPiece, 1, 1) == true);
-    }
-
-    SECTION("Collision with Board Edge (Right)") {
-        REQUIRE(board.isColliding(testPiece, 0, 4) == true);
-    }
-
-    SECTION("Collision with Board Edge (Left)") {
-        REQUIRE(board.isColliding(testPiece, 3, -1) == true);
-    }
-
 
 }
+
+TEST_CASE("getOccupiedPositions") {
+    GameBoard board(10,20);
+    SECTION("No occupied positions") {
+        REQUIRE(board.getOccupiedPositions().empty() == true);
+    }
+    SECTION("Occupied positions") {
+        std::shared_ptr<Piece> iPiece = std::make_shared<Piece>(IPiece());
+        std::shared_ptr<Piece> tPiece = std::make_shared<Piece>(TPiece());
+        std::shared_ptr<Piece> zPiece = std::make_shared<Piece>(ZPiece());
+
+        board.setPieceAt(3, 3, iPiece);
+        board.setPieceAt(6, 6, tPiece);
+        board.setPieceAt(7, 15, zPiece);
+
+        REQUIRE(board.getOccupiedPositions().size() == 12);
+    }
+}
+
 

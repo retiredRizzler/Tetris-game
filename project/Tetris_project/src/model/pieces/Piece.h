@@ -10,7 +10,8 @@ public:
 
     virtual void setPosition(int r, int c);
     virtual std::vector<Position> getAbsolutePositions() const;
-    virtual void rotate();
+    virtual void rotateClockwise();
+    virtual void rotateCounterClockwise();
     virtual void moveDown();
     virtual void moveLeft();
     virtual void moveRight();
@@ -25,6 +26,7 @@ protected:
 private:
     int row;
     int col;
+    std::vector<std::vector<int>> getRotationMatrix();
 };
 
 #endif // PIECE_H

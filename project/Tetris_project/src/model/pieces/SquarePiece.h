@@ -6,6 +6,8 @@
 class SquarePiece : public Piece {
 public:
     SquarePiece();
+    void rotateClockwise() override;
+    void rotateCounterClockwise() override;
     bool operator==(const Piece& other) const override;
 
 };

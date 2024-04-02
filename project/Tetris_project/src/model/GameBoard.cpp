@@ -22,33 +22,32 @@ std::shared_ptr<Piece> GameBoard::getPieceAt(int row, int col) const {
 }
 
 void GameBoard::setPieceAt(int row, int col, const std::shared_ptr<Piece>& piece) {
-    if (isInsideBoard(row, col)) {
-        board[row][col] = piece;
+    if (!isInsideBoard(row, col)) {
+        throw std::out_of_range("Tried to place a piece outside the board!");
     }
+    piece->setPosition(row, col);
+    board[row][col] = piece;
 }
 
 bool GameBoard::isInsideBoard(int row, int col) const {
     return row >= 0 && row < rows && col >= 0 && col < cols;
 }
 
-/**
- * @brief Checks if a piece collides with the board or other pieces.
- *
- * @param piece A shared pointer to the `Piece` object to be checked for collision.
- * @param row The intended row position where the piece should be placed.
- * @param col The intended column position where the piece should be placed.
- * @return `true` if there is a collision, `false` otherwise.
- */
-bool GameBoard::isColliding(const std::shared_ptr<Piece>& piece, int row, int col) const {
-    // Check if any block of the piece would collide with an occupied space on the board
-    for (const Position& pos : piece->getAbsolutePositions()) {
-        int nextRow = pos.getX() + row;
-        int nextCol = pos.getY() + col;
-        if (!isInsideBoard(nextRow, nextCol) || getPieceAt(nextRow, nextCol) != nullptr) {
-            return true;
+std::vector<Position> GameBoard::getOccupiedPositions() const {
+    std::vector<Position> occupiedPositions;
+
+    for (int row = 0; row < rows; ++row) {
+        for (int col = 0; col < cols; ++col) {
+            std::shared_ptr<Piece> piece = board[row][col];
+            if (piece != nullptr) {
+                for (const auto& position : piece->getAbsolutePositions()) {
+                    occupiedPositions.push_back(position);
+                }
+            }
         }
     }
-    return false;
+
+    return occupiedPositions;
 }
 
 /**

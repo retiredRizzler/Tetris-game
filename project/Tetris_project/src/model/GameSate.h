@@ -1,7 +1,7 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
-#include "Piece.h"
+#include "pieces/Piece.h"
 #include "PieceBag.h"
 
 class GameState {
@@ -13,7 +13,7 @@ private:
     bool gameOver;
 
 public:
-    GameState(int score, std::shared_ptr<Piece> currentPiece, int currentLevel, PieceBag& pieceBag);
+    GameState(int score, std::shared_ptr<Piece> currentPiece, int currentLevel);
 
     // Getters
     int getScore() const;

@@ -1,8 +1,7 @@
 #include "GameState.h"
 
-GameState::GameState(int score, std::shared_ptr<Piece> currentPiece, int currentLevel, PieceBag& pieceBag)
+GameState::GameState(int score, std::shared_ptr<Piece> currentPiece, int currentLevel)
     : score(score), currentPiece(std::move(currentPiece)), currentLevel(currentLevel) {
-    nextPiece = pieceBag.getNextPiece();
     gameOver = false;
 }
 

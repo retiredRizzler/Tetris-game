@@ -22,7 +22,7 @@ add_executable(Tetris_projectTests
     ../src/model/pieces/TPiece.h
     ../src/model/GameBoard.h
     ../src/model/GameBoard.cpp
-    ../src/model/GameSate.h
+    ../src/model/GameState.h
     ../src/model/GameState.cpp
 
     testGameBoard.cpp

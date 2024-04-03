@@ -1,22 +1,12 @@
 #include "TetrisModel.h"
-#include "GameSate.h"
 
-TetrisModel::TetrisModel(GameBoard& board) : board(board), bag(5), state(0, bag.getNextPiece(), 1), totalCompletedLine(0)
-{
+TetrisModel::TetrisModel(int boardRow, int boardCol) : board(boardRow,boardCol), bag(5), state(0, bag.getNextPiece(), 1), totalCompletedLine(0)
+{}
+
+void TetrisModel:: startGame() {
     board.setPieceAt(0, 5, state.getCurrentPiece());
+    startTime = std::chrono::steady_clock::now();
 }
-
-//Getters for members state, board and bag
-GameState& TetrisModel::getState(){
-    return state;
-}
-GameBoard& TetrisModel::getBoard(){
-    return board;
-}
-PieceBag& TetrisModel::getBag(){
-    return bag;
-}
-
 
 void TetrisModel::movePieceDown() {
     auto& piece = state.getCurrentPiece();
@@ -85,19 +75,56 @@ void TetrisModel::rotatePiece(char dir) {
     }
 }
 
+bool TetrisModel::isGameOver(){
+    auto currentPiece = state.getCurrentPiece();
+    if (isColliding(currentPiece, 0, currentPiece->getCol())) {
+        return true;
+    }
+
+    if (state.getScore() >= MAX_SCORE) {
+        return true;
+    }
+
+    if (totalCompletedLine >= MAX_COMPLETED_LINES) {
+        return true;
+    }
+
+    //source chat.openai.com
+    auto currentTime = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsedTime = currentTime - startTime;
+    if (elapsedTime.count() >= MAX_TIME_SECONDS) {
+        std::cerr << "max time reached u've lost";
+        return true;
+    }
+    return false;
+}
+
 void TetrisModel::updateGame() {
     auto currentPiece = state.getCurrentPiece();
     if (!canMoveDown()) {
         std::cerr << "Can't move down, updating game"; //Only for debug, will throws exception later
         int completedLine = board.clearCompletedLines();
         updateScore(completedLine);
-        dropScore = 0;
+        dropScore = 0; // so next time the player drops a piece, score wont be false
+        totalCompletedLine = 0; //same here but with completedLine
 
         if (totalCompletedLine % 10 == 0) {
             state.incrementCurrentLevel();
         }
         state.updateCurrentPiece(bag);
+        notifyObservers();
     }
+}
+
+//Getters for members state, board and bag
+GameState& TetrisModel::getState(){
+    return state;
+}
+GameBoard& TetrisModel::getBoard(){
+    return board;
+}
+PieceBag& TetrisModel::getBag(){
+    return bag;
 }
 
 bool TetrisModel::canMoveDown() {
@@ -122,7 +149,8 @@ void TetrisModel::updateScore(int completedLine) {
         computedScore = (300 * totalCompletedLine + dropScore) * state.getCurrentLevel();
         break;
     case 4:
-        computedScore = (1200 *totalCompletedLine + dropScore) * state.getCurrentLevel();
+        computedScore = (1200 * totalCompletedLine + dropScore) * state.getCurrentLevel();
+        break;
     default:
         throw std::out_of_range("max of completed line reached, see if totalCompletedLine is updated correctly");
     }

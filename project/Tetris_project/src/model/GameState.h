@@ -23,7 +23,7 @@ public:
     // Setters
     void incrementScore(int score);
     void updateCurrentPiece(PieceBag& pieceBag);
-    void setCurrentLevel(int level);
+    void incrementCurrentLevel();
 };
 
 #endif // GAMESTATE_H

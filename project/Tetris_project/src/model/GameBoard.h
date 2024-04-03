@@ -16,6 +16,7 @@ public:
 
     int getRows() const;
     int getCols() const;
+    void setBoard(int row, int col);
 
     std::shared_ptr<Piece> getPieceAt(int row, int col) const;
     void setPieceAt(int row, int col, const std::shared_ptr<Piece>& piece);

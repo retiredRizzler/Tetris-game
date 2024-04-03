@@ -1,0 +1,77 @@
+#include "Controller.h"
+
+Controller::Controller() : game(10, 20) {}
+
+void Controller::run() {
+    int rows, cols;
+    char choice;
+    std::cout << "Do you want to specify the board size? (y/n): ";
+    std::cin >> choice;
+    if (choice == 'y' || choice == 'Y') {
+        askBoardSize(rows, cols);
+        game.getGameBoard().setBoard(rows, cols);
+    }
+    game.start();
+}
+
+void Controller::askBoardSize(int& rows, int& cols) {
+    //source chat.openai.com for robustness
+    while (true) {
+        std::cout << "Enter the number of rows for the game board: ";
+        if (!(std::cin >> rows)) {
+            std::cerr << "Invalid input. Please enter an integer for the number of rows." << std::endl;
+            std::cin.clear(); // Clear error flags
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+            continue;
+        }
+
+        std::cout << "Enter the number of columns for the game board: ";
+        if (!(std::cin >> cols)) {
+            std::cerr << "Invalid input. Please enter an integer for the number of columns." << std::endl;
+            std::cin.clear(); // Clear error flags
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+            continue;
+        }
+
+        // Check if rows and cols are within valid range (e.g., greater than 0)
+        if (rows <= 0 || cols <= 0) {
+            std::cerr << "Invalid input. Number of rows and columns must be greater than 0." << std::endl;
+            continue;
+        }
+
+        // Input is valid, break out of the loop
+        break;
+    }
+}
+
+void Controller::handleInput() {
+    // Handle user input and update game accordingly
+    char userInput;
+    std::cin >> userInput;
+
+    switch (userInput) {
+    case 'r':
+        game.rotatePiece('r');
+        game.updateGame();
+        break;
+    case 'q':
+        game.movePieceLeft();
+        game.updateGame();
+        break;
+    case 's':
+        game.movePieceDown();
+        game.updateGame();
+        break;
+    case 'd':
+        game.movePieceRight();
+        game.updateGame();
+        break;
+    case 'x':
+        game.dropPiece();
+        game.updateGame();
+        break;
+    default:
+        std::cout << "Invalid input. Please use w, a, s, d, or space." << std::endl;
+    }
+}
+

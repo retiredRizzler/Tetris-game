@@ -13,6 +13,12 @@ int GameBoard::getCols() const {
     return cols;
 }
 
+void GameBoard::setBoard(int row, int col) {
+    this->rows = row;
+    this->cols = col;
+    board.resize(rows, std::vector<std::shared_ptr<Piece>>(cols, nullptr));
+}
+
 std::shared_ptr<Piece> GameBoard::getPieceAt(int row, int col) const {
     if (isInsideBoard(row, col)) {
         return board[row][col];

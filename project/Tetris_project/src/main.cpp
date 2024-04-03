@@ -3,7 +3,7 @@
 #include "model/pieces/TPiece.h"
 #include "model/pieces/JPiece.h"
 #include "model/pieces/LPiece.h"
-
+/*
 int main()
 {
     GameBoard board(10, 20);
@@ -19,3 +19,4 @@ int main()
 
     return 0;
 }
+**/

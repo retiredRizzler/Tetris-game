@@ -1,19 +1,28 @@
-#ifndef CONSOLEVIEW_HPP
-#define CONSOLEVIEW_HPP
+#include "../model/TetrisModel.h"
+#include "../model/observer.h"
 
-#include "../model/GameBoard.h"
-#include "../model/GameSate.h"
-#include <iostream>
-#include <string>
-
-class ConsoleView {
+class ConsoleView : public Observer {
 public:
-    // Method to display the welcome message
-    static void displayWelcome() {
+    void update(const Observable* observable) override {
+        // Ensure observable is actually a TetrisModel
+        const TetrisModel* model = dynamic_cast<const TetrisModel*>(observable);
+        if (model) {
+            displayBoard(*model);
+            displayLevel(*model);
+            displayScore(*model);
+        } else {
+            // Handle error: observable is not a TetrisModel
+            std::cerr << "Error: Invalid observable type!" << std::endl;
+        }
+    }
+
+private:
+    void displayWelcome() {
         std::cout << "Welcome to the game!" << std::endl;
     }
 
-    static void displayBoard(const GameBoard& board) {
+    void displayBoard(TetrisModel& model) {
+        const GameBoard& board = model.getBoard();
         for (int i = 0; i < board.getCols() + 2; ++i) {
             std::cout << "#";
         }
@@ -51,37 +60,13 @@ public:
         std::cout << std::endl;
     }
 
-
-
-
-    // Method to display the current level
-    static void displayLevel(const GameState& state) {
+    void displayLevel(TetrisModel& model) {
+        const GameState& state = model.getState();
         std::cout << "Current Level: " << state.getCurrentLevel() << std::endl;
     }
 
-     // Method to display the score
-    static void displayScore(const GameState& state) {
+    void displayScore(TetrisModel& model) {
+        const GameState& state = model.getState();
         std::cout << "Score: " << state.getScore() << std::endl;
     }
-
-    // Method to display the game state
-    static void displayState(const GameState& state) {
-        if (state.isGameOver()) {
-            std::cout << "Game Over!" << std::endl;
-        } else {
-            std::cout << "Game is still ongoing." << std::endl;
-        }
-    }
-
-    // Method to display an error message
-    static void displayError(const std::string& msg) {
-        std::cerr << "Error: " << msg << std::endl;
-    }
-
-    // Method to display the end of the game
-    static void displayEnd() {
-        std::cout << "Game ended. Goodbye!" << std::endl;
-    }
 };
-
-#endif // CONSOLEVIEW_HPP

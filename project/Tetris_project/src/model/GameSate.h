@@ -23,7 +23,7 @@ public:
     // Setters
     void incrementScore(int score);
     void updateCurrentPiece(PieceBag& pieceBag);
-    void incrementCurrentLevel(int level);
+    void incrementCurrentLevel();
 };
 
 #endif

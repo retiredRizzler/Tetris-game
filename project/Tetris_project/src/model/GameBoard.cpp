@@ -29,7 +29,10 @@ std::shared_ptr<Piece> GameBoard::getPieceAt(int row, int col) const {
 
 void GameBoard::setPieceAt(int row, int col, const std::shared_ptr<Piece>& piece) {
     if (!isInsideBoard(row, col)) {
-        throw std::out_of_range("Tried to place a piece outside the board!");
+        throw std::out_of_range("Tried to place a piece outside the board");
+    }
+    if (piece == nullptr) {
+        throw std::runtime_error("Tried to set a nullptr piece with setPieceAt function");
     }
     piece->setPosition(row, col);
     board[row][col] = piece;
@@ -75,37 +78,29 @@ std::vector<int> GameBoard::findCompletedLines() const {
 }
 
 int GameBoard::clearCompletedLines() {
-    // 1. Identify completed lines
     std::vector<int> completedRows = findCompletedLines();
-
-
-    // 2. Remove completed lines and shift pieces down
-    if (!completedRows.empty()) {
-        //Very important to keep track of the number of completed rows to shift down the piece correctly
-        int nbClearedLines = completedRows.size();
-        for (int clearedRow = rows - 1; clearedRow >= 0; --clearedRow) {
-            if (std::find(completedRows.begin(), completedRows.end(), clearedRow) != completedRows.end()) {
-                // Clear completed row
-                for (int col = 0; col < cols; ++col) {
-                    setPieceAt(clearedRow, col, nullptr);
-                }
-
-                // Shift down remaining pieces above the cleared row
-                for (int row = clearedRow - 1; row >= 0; --row) {
-                    for (int col = 0; col < cols; ++col) {
-                        auto piece = getPieceAt(row, col);
-                        if (piece != nullptr) {
-                            // Move piece down one row
-                            setPieceAt(row, col, nullptr);
-                            setPieceAt(row + nbClearedLines, col, piece);
-                        }
-                    }
-                    nbClearedLines++; // Adjust number of cleared lines for shifting
+    int linesCleared = completedRows.size(); // Number of completed lines
+    if(completedRows.empty()) {
+        return 0;
+    }
+    // Delete pieces in the completed lines
+    for (int row : completedRows) {
+        for (int col = 0; col < cols; ++col) {
+            board[row][col].reset(); // Reset shared_ptr, releasing ownership
+        }
+    }
+    // Shift down the remaining pieces
+    for (int row : completedRows) {
+        // Shift down the pieces above the completed line
+        for (int i = row - 1; i >= 0; --i) {
+            for (int col = 0; col < cols; ++col) {
+                if (board[i][col] != nullptr) {
+                board[i + linesCleared][col] = std::move(board[i][col]);// Move shared_ptr to new position
                 }
             }
         }
     }
-    return completedRows.size();
+    return linesCleared;
 }
 
 std::shared_ptr<Piece>& GameBoard::at(int row, int col) {

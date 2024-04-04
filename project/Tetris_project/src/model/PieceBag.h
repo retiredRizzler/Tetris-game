@@ -46,7 +46,7 @@ private:
 
     /**
      * @brief Adds a random piece to the piece bag.
-     *
+     * We used Gemini (google AI) to improve the "randomness"
      * This method randomly selects a Tetris piece and adds it to the piece bag.
      */
     void addRandomPiece();

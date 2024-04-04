@@ -50,7 +50,7 @@ void TetrisModel::movePieceDown() {
 
 void TetrisModel::deleteCurrentPieceFromBoard() {
     for (const auto& pos : state.getCurrentPiece()->getAbsolutePositions()) {
-        board.at(pos.getX(), pos.getY()) = nullptr;
+        board.at(pos.getX(), pos.getY()).reset();
     }
 }
 
@@ -168,7 +168,7 @@ bool TetrisModel::isGameOver(){
     auto currentTime = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsedTime = currentTime - startTime;
     if (elapsedTime.count() >= MAX_TIME_SECONDS) {
-        std::cerr << "max time reached u've lost";
+        std::cerr << "Maximum time reached game is over";
         return true;
     }
     return false;

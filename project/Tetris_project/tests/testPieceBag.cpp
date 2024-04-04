@@ -19,6 +19,7 @@ TEST_CASE("PieceBag: refill") {
     REQUIRE(bag.getBag().empty() == false);
 }
 
+
 TEST_CASE("PieceBag: getNextPiece") {
     PieceBag bag(2);
 
@@ -33,3 +34,5 @@ TEST_CASE("PieceBag: getNextPiece") {
     // Check if the pieces are different (doesn't guarantee unique pieces, but increases the chance)
     REQUIRE(firstPiece != secondPiece);
 }
+
+

@@ -1,7 +1,7 @@
 #include "PieceBag.h"
 #include <memory>
 #include <vector>
-#include <cstdlib>
+#include <random>
 #include "pieces/Piece.h"
 #include "pieces/IPiece.h"
 #include "pieces/ZPiece.h"
@@ -36,32 +36,37 @@ std::shared_ptr<Piece> PieceBag::getNextPiece() {
 }
 
 void PieceBag::addRandomPiece() {
-    int randomPiece = rand() % 7;
+    // Create a random device to seed the generator
+    std::random_device rd;
+
+    // Initialize a Mersenne Twister engine with the random seed
+    static std::mt19937 generator(rd());
+
+    // Generate a random number between 0 and 6 (inclusive)
+    std::uniform_int_distribution<int> distribution(0, 6);
+    int randomPiece = distribution(generator);
 
     switch (randomPiece) {
-    case 0:
-        bag.push_back(std::make_shared<IPiece>());
-        break;
-    case 1:
-        bag.push_back(std::make_shared<SquarePiece>());
-        break;
-    case 2:
-        bag.push_back(std::make_shared<ZPiece>());
-        break;
-    case 3:
-        bag.push_back(std::make_shared<JPiece>());
-        break;
-    case 4:
-        bag.push_back(std::make_shared<SPiece>());
-        break;
-    case 5:
-        bag.push_back(std::make_shared<LPiece>());
-        break;
-    case 6:
-        bag.push_back(std::make_shared<TPiece>());
-        break;
-
-    default:
-        break;
+        case 0:
+            bag.push_back(std::make_shared<IPiece>());
+            break;
+        case 1:
+            bag.push_back(std::make_shared<SquarePiece>());
+            break;
+        case 2:
+            bag.push_back(std::make_shared<ZPiece>());
+            break;
+        case 3:
+            bag.push_back(std::make_shared<JPiece>());
+            break;
+        case 4:
+            bag.push_back(std::make_shared<SPiece>());
+            break;
+        case 5:
+            bag.push_back(std::make_shared<LPiece>());
+            break;
+        case 6:
+            bag.push_back(std::make_shared<TPiece>());
+            break;
     }
 }

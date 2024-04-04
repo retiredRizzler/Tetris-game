@@ -1,5 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
-#include "model/pieces/Piece.h";
+#include "model/pieces/Piece.h"
 #include "model/pieces/IPiece.h"
 #include "model/pieces/ZPiece.h"
 #include "model/pieces/JPiece.h"

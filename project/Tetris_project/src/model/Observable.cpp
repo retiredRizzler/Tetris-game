@@ -16,7 +16,7 @@ void Observable::unregisterObserver(Observer * observer)
     observers.erase(observer);
 }
 
-void Observable::notifyObservers() const
+void Observable::notifyObservers()
 {
     for (Observer * observer : observers)
     {

@@ -9,7 +9,7 @@ class Observer
 {
 public:
     Observer();
-    virtual void update(const Observable * subject) = 0;
+    virtual void update(Observable * subject) = 0;
 };
 
 

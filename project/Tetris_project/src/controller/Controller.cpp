@@ -12,6 +12,13 @@ void Controller::run() {
         game.getGameBoard().setBoard(rows, cols);
     }
     game.start();
+    game.getView().displayCommands();
+    game.updateGame();
+    while (!game.isGameOver()) {
+        handleInput();
+    }
+
+
 }
 
 void Controller::askBoardSize(int& rows, int& cols) {
@@ -52,26 +59,24 @@ void Controller::handleInput() {
     switch (userInput) {
     case 'r':
         game.rotatePiece('r');
-        game.updateGame();
+        break;
+    case 'a':
+        game.rotatePiece('l');
         break;
     case 'q':
         game.movePieceLeft();
-        game.updateGame();
         break;
     case 's':
         game.movePieceDown();
-        game.updateGame();
         break;
     case 'd':
         game.movePieceRight();
-        game.updateGame();
         break;
     case 'x':
         game.dropPiece();
-        game.updateGame();
         break;
     default:
-        std::cout << "Invalid input. Please use w, a, s, d, or space." << std::endl;
+        game.getView().displayCommands();
     }
 }
 

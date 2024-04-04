@@ -12,7 +12,7 @@ public:
     Observable();
     virtual void registerObserver(Observer * observer) final;
     virtual void unregisterObserver(Observer * observer) final;
-    void notifyObservers() const;
+    void notifyObservers();
 
 private:
     std::set<Observer *> observers;

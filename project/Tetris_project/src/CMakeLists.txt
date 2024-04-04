@@ -2,9 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 
 add_executable(Tetris_project
-    main.cpp
-
-    model/pieces/ZPiece.cpp
+        model/pieces/ZPiece.cpp
     model/pieces/Piece.h
     model/Position.hpp
     model/pieces/LPiece.cpp

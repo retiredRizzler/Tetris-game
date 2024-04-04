@@ -1,35 +1,90 @@
 #include "TetrisModel.h"
 
-TetrisModel::TetrisModel(int boardRow, int boardCol) : board(boardRow,boardCol), bag(5), state(0, bag.getNextPiece(), 1), totalCompletedLine(0)
-{}
+TetrisModel::TetrisModel(int boardRow, int boardCol) :
+    board(boardRow,boardCol), bag(5),
+    state(0, bag.getNextPiece(), 1), totalCompletedLine(0){
+    dropScore = 0;
+    totalCompletedLine = 0;
+}
 
 void TetrisModel:: startGame() {
-    board.setPieceAt(0, 5, state.getCurrentPiece());
+    spawnPiece();
     startTime = std::chrono::steady_clock::now();
+}
+
+void TetrisModel::spawnPiece() {
+    auto& piece = state.getCurrentPiece();
+
+    int spawnRow = 1;
+    int spawnCol = board.getCols() / 2;
+    board.setPieceAt(spawnRow, spawnCol, piece);
+
+    // Move the piece down until it's completely in the board
+    while (!pieceCompletelyInsideBoard()) {
+        movePieceDown();
+    }
+    setCurrentPieceOnBoard();
+}
+
+bool TetrisModel::pieceCompletelyInsideBoard() {
+    auto& piece = state.getCurrentPiece();
+
+    for (const auto& pos : piece->getAbsolutePositions()) {
+        if (!board.isInsideBoard(pos.getX(), pos.getY())) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void TetrisModel::movePieceDown() {
     auto& piece = state.getCurrentPiece();
     if (!canMoveDown()) {
-        std::cerr << "Collision detected: please make a valid move"; //Only for debug, will throws exception later
+        std::cerr << ("Collision detected while moving piece down");
     }
+    deleteCurrentPieceFromBoard();
     state.getCurrentPiece()->moveDown();
+    setCurrentPieceOnBoard();
+}
+
+void TetrisModel::deleteCurrentPieceFromBoard() {
+    for (const auto& pos : state.getCurrentPiece()->getAbsolutePositions()) {
+        board.at(pos.getX(), pos.getY()) = nullptr;
+    }
+}
+
+void TetrisModel::setCurrentPieceOnBoard() {
+
+    for (const auto& pos : state.getCurrentPiece()->getAbsolutePositions()) {
+        board.at(pos.getX(), pos.getY()) = state.getCurrentPiece();
+    }
 }
 
 void TetrisModel::movePieceLeft() {
     auto& piece = state.getCurrentPiece();
-    if (isColliding(piece, piece->getRow(), piece->getCol() - 1)) {
-        std::cerr << "Collision detected: please make a valid move";
+    if (isColliding(piece, 0, -1)) {
+        std::cerr << "Collision detected while moving piece left";
+        return;
     }
-    state.getCurrentPiece()->moveLeft();
+
+        deleteCurrentPieceFromBoard();
+        state.getCurrentPiece()->moveLeft();
+        setCurrentPieceOnBoard();
+
 }
 
 void TetrisModel::movePieceRight() {
     auto& piece = state.getCurrentPiece();
-    if (isColliding(piece, piece->getRow(), piece->getCol() + 1)) {
-        std::cerr << "Collision detected: please make a valid move";
+    if (isColliding(piece, 0, 1)) {
+        std::cerr << "Collision detected while moving piece right";
+        return;
     }
-    state.getCurrentPiece()->moveRight();
+
+        deleteCurrentPieceFromBoard();
+        state.getCurrentPiece()->moveRight();
+        setCurrentPieceOnBoard();
+
 }
 
 void TetrisModel::dropPiece() {
@@ -37,10 +92,10 @@ void TetrisModel::dropPiece() {
     int dropCount = 0;
     while (true) {
         if (!canMoveDown()) {
-            std::cerr << "Collision detected: please make a valid move";
+            std::cerr << "Collision detected while dropping piece";
             break;
         }
-        piece->moveDown();
+        movePieceDown();
         if (dropCount > 1) {
             dropScore++;
         }
@@ -52,34 +107,54 @@ void TetrisModel::rotatePiece(char dir) {
     auto& piece = state.getCurrentPiece();
     std::vector<std::vector<int>> rotationMatrix = piece->getRotationMatrix();// source : Gemini (google AI)
     if (dir == 'r') {
-        for (const auto& piecePos : piece->getAbsolutePositions()) {
-            int nextRow = rotationMatrix[0][0] * piecePos.getX() + rotationMatrix[0][1] * piecePos.getY();
-            int nextCol = rotationMatrix[1][0] * piecePos.getX() + rotationMatrix[1][1] * piecePos.getY();
-            if (isColliding(piece, nextRow, nextCol)) {
-                std::cerr << "Collision detected: please make a valid move";
-                return;
+        for (const auto &piecePos: piece->getShape()) {
+            int deltaRow = rotationMatrix[0][0] * piecePos.getX() + rotationMatrix[0][1] * piecePos.getY();
+            int deltaCol = rotationMatrix[1][0] * piecePos.getX() + rotationMatrix[1][1] * piecePos.getY() ;
+            for (const auto& absPos : piece->getAbsolutePositions()) {
+                int pieceNextRow = absPos.getX() + deltaRow;
+                int pieceNextCol = absPos.getY() + deltaCol;
+                if (!board.isInsideBoard(pieceNextRow, pieceNextCol)
+                    //Have to check it's not the position of the currentPiece
+                    || (board.at(pieceNextRow, pieceNextCol) != piece
+                        && board.at(pieceNextRow, pieceNextCol) != nullptr)) {
+                    std::cerr << "Collision detected while rotating piece";
+                    return;
+                }
+                break; // Here the break is very important to update correctly deltaRow and deltaCol for each absPos
             }
         }
+        deleteCurrentPieceFromBoard();
         piece->rotateClockwise();
+        setCurrentPieceOnBoard();
     } else {
         piece->negateMatrix(rotationMatrix);
-        for (const auto& piecePos : piece->getAbsolutePositions()) {
-            int nextRow = rotationMatrix[0][0] * piecePos.getX() + rotationMatrix[0][1] * piecePos.getY();
-            int nextCol = rotationMatrix[1][0] * piecePos.getX() + rotationMatrix[1][1] * piecePos.getY();
-            if (isColliding(piece, nextRow, nextCol)) {
-                std::cerr << "Collision detected: please make a valid move";
-                return;
+        for (const auto &piecePos: piece->getShape()) {
+            int deltaRow = rotationMatrix[0][0] * piecePos.getX() + rotationMatrix[0][1] * piecePos.getY();
+            int deltaCol = rotationMatrix[1][0] * piecePos.getX() + rotationMatrix[1][1] * piecePos.getY() ;
+            for (const auto& absPos : piece->getAbsolutePositions()) {
+                int pieceNextRow = absPos.getX() + deltaRow;
+                int pieceNextCol = absPos.getY() + deltaCol;
+                if (!board.isInsideBoard(pieceNextRow, pieceNextCol)
+                    //Have to check it's not the position of the currentPiece
+                    || (board.at(pieceNextRow, pieceNextCol) != piece
+                        && board.at(pieceNextRow, pieceNextCol) != nullptr)) {
+                    std::cerr << "Collision detected while rotating piece";
+                    return;
+                }
+                break; // Here the break is very important to update correctly deltaRow and deltaCol for each absPos
             }
         }
+        deleteCurrentPieceFromBoard();
         piece->rotateCounterClockwise();
+        setCurrentPieceOnBoard();
     }
 }
 
 bool TetrisModel::isGameOver(){
     auto currentPiece = state.getCurrentPiece();
-    if (isColliding(currentPiece, 0, currentPiece->getCol())) {
-        return true;
-    }
+    //if (isColliding(currentPiece, 0, currentPiece->getCol())) { Have to fix it -> easy
+    //    return true;
+    //}
 
     if (state.getScore() >= MAX_SCORE) {
         return true;
@@ -104,15 +179,14 @@ void TetrisModel::updateGame() {
     if (!canMoveDown()) {
         std::cerr << "Can't move down, updating game"; //Only for debug, will throws exception later
         int completedLine = board.clearCompletedLines();
+        totalCompletedLine = completedLine;
         updateScore(completedLine);
         dropScore = 0; // so next time the player drops a piece, score wont be false
-        totalCompletedLine = 0; //same here but with completedLine
-
-        if (totalCompletedLine % 10 == 0) {
+        if (totalCompletedLine >= 10 && totalCompletedLine % 10 == 0) {
             state.incrementCurrentLevel();
         }
         state.updateCurrentPiece(bag);
-        notifyObservers();
+        spawnPiece();
     }
 }
 
@@ -129,7 +203,7 @@ PieceBag& TetrisModel::getBag(){
 
 bool TetrisModel::canMoveDown() {
     auto currentPiece = state.getCurrentPiece();
-    if (isColliding(currentPiece, currentPiece->getRow() + 1, currentPiece->getCol())) {
+    if (isColliding(currentPiece, 1, 0)) {
         return false;
     }
     return true;
@@ -140,16 +214,16 @@ void TetrisModel::updateScore(int completedLine) {
     switch (completedLine) {
     case 0:
     case 1:
-        computedScore = (40 * totalCompletedLine + dropScore) * state.getCurrentLevel();
+        computedScore = (40 * completedLine + dropScore) * state.getCurrentLevel();
         break;
     case 2:
-        computedScore = (100 * totalCompletedLine + dropScore) * state.getCurrentLevel();
+        computedScore = (100 * completedLine + dropScore) * state.getCurrentLevel();
         break;
     case 3:
-        computedScore = (300 * totalCompletedLine + dropScore) * state.getCurrentLevel();
+        computedScore = (300 * completedLine + dropScore) * state.getCurrentLevel();
         break;
     case 4:
-        computedScore = (1200 * totalCompletedLine + dropScore) * state.getCurrentLevel();
+        computedScore = (1200 * completedLine + dropScore) * state.getCurrentLevel();
         break;
     default:
         throw std::out_of_range("max of completed line reached, see if totalCompletedLine is updated correctly");
@@ -165,16 +239,16 @@ void TetrisModel::updateScore(int completedLine) {
  * @param col The intended column position where the piece should be placed.
  * @return `true` if there is a collision, `false` otherwise.
  */
-bool TetrisModel::isColliding(const std::shared_ptr<Piece>& piece, int row, int col) const {
-    auto occupiedPositions = board.getOccupiedPositions();
-
+bool TetrisModel::isColliding(const std::shared_ptr<Piece>& piece, int deltaRow, int deltaCol) const {
     for (const Position& piecePos : piece->getAbsolutePositions()) {
-        int pieceNextRow = piecePos.getX() + row;
-        int pieceNextCol = piecePos.getY() + col;
-        for (const auto occupiedPos : occupiedPositions) {
-            if (!board.isInsideBoard(row, col) ||(pieceNextRow == occupiedPos.getX() && pieceNextCol == occupiedPos.getY())) {
-                return true;
-            }
+        int pieceNextRow = piecePos.getX() + deltaRow;
+        int pieceNextCol = piecePos.getY() + deltaCol;
+        // if piece is not inside the board, or reach another piece isColliding == true
+        if (!board.isInsideBoard(pieceNextRow, pieceNextCol)
+        //Have to check it's not the position of the currentPiece
+                || (board.at(pieceNextRow, pieceNextCol) != piece
+                    && board.at(pieceNextRow, pieceNextCol) != nullptr)) {
+            return true;
         }
     }
     return false;

@@ -6,26 +6,33 @@ void Controller::run() {
     int rows, cols;
     char choice;
     game.getView().displayWelcome();
-    std::cout << "Do you want to specify the board size? (y/n): ";
+    game.getView().displayMessage("Do you want to specify a board size? (y/n): ");
     std::cin >> choice;
     if (choice == 'y' || choice == 'Y') {
         askBoardSize(rows, cols);
         game.getGameBoard().setBoard(rows, cols);
     }
+
+    char fillChoice;
+    game.getView().displayMessage("Do you want to prefilled the board with random pieces? (y/n): ");
+    std::cin >> fillChoice;
+    if (fillChoice == 'y' || fillChoice == 'Y') {
+        game.fillBoardWithRandomPieces();
+    }
+
     game.start();
     game.getView().displayCommands();
     game.updateGame();
     while (!game.isGameOver()) {
         handleInput();
     }
-
-
+    game.getView().displayEnd();
 }
 
 void Controller::askBoardSize(int& rows, int& cols) {
     //source chat.openai.com for robustness
     while (true) {
-        std::cout << "Enter the number of rows for the game board: ";
+        game.getView().displayMessage("Enter the number of rows for the game board (between 5 and 30 included): ");
         if (!(std::cin >> rows)) {
             std::cerr << "Invalid input. Please enter an integer for the number of rows." << std::endl;
             std::cin.clear(); // Clear error flags
@@ -33,7 +40,7 @@ void Controller::askBoardSize(int& rows, int& cols) {
             continue;
         }
 
-        std::cout << "Enter the number of columns for the game board: ";
+        game.getView().displayMessage("Enter the number of columns for the game board (between 10 and 100): ");
         if (!(std::cin >> cols)) {
             std::cerr << "Invalid input. Please enter an integer for the number of columns." << std::endl;
             std::cin.clear(); // Clear error flags
@@ -42,8 +49,9 @@ void Controller::askBoardSize(int& rows, int& cols) {
         }
 
         // Check if rows and cols are within valid range (e.g., greater than 0)
-        if (rows <= 0 || cols <= 0) {
-            std::cerr << "Invalid input. Number of rows and columns must be greater than 0." << std::endl;
+        if (rows < 5 || cols < 10 || rows > 30 || cols > 100) {
+            std::cerr << "Invalid input. Number of rows and columns must be included between 5 and 30. "
+                         "And columns must be included between 10 and 100." << std::endl;
             continue;
         }
 

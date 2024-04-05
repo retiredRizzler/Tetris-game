@@ -7,6 +7,10 @@ void TetrisGame::start() {
     model.startGame();
 }
 
+void TetrisGame::fillBoardWithRandomPieces() {
+    model.fillBoardWithRandomPieces();
+}
+
 void TetrisGame::end() {
 //potential function for stop the game, saving score,...
 }

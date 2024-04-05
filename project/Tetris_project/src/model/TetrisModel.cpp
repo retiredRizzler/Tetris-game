@@ -1,3 +1,4 @@
+#include <random>
 #include "TetrisModel.h"
 
 TetrisModel::TetrisModel(int boardRow, int boardCol) :
@@ -11,6 +12,34 @@ void TetrisModel::startGame() {
     startTime = std::chrono::steady_clock::now();
 }
 
+void TetrisModel::fillBoardWithRandomPieces() {
+    std::random_device rd;
+    std::mt19937 gen(rd()); // Mersenne Twister pseudo-random number generator, source : chat.openai
+    int halfBoardWidth = board.getRows() / 2;
+
+    for (int line = board.getRows() - 1; line > halfBoardWidth; --line) {
+        // Generate random column for the pieces
+        std::uniform_int_distribution<int> num_pieces_dist(0, board.getCols() - 1);
+        int num_pieces = num_pieces_dist(gen);
+
+        // Ensure that no line is completely filled
+        if (num_pieces == board.getCols()) {
+            num_pieces -= 1;
+        }
+
+        // Generate random positions for the pieces
+        std::uniform_int_distribution<int> pos_dist(0, board.getCols() - 1);
+
+        // Fill the line with random pieces from the bag
+        for (int i = 0; i < num_pieces; ++i) {
+            int pos = pos_dist(gen);
+            state.updateCurrentPiece(bag);
+            board.setPieceAt(line, pos, state.getCurrentPiece());
+            movePieceDown();
+        }
+    }
+}
+
 void TetrisModel::spawnPiece() {
     auto& piece = state.getCurrentPiece();
 
@@ -20,7 +49,7 @@ void TetrisModel::spawnPiece() {
 
     // Move the piece down until it's completely within the board
     while (!pieceCompletelyInsideBoard()) {
-        state.getCurrentPiece()->moveDown();
+        piece->moveDown();
     }
     setCurrentPieceOnBoard();
 }
@@ -33,14 +62,13 @@ bool TetrisModel::pieceCompletelyInsideBoard() {
             return false;
         }
     }
-
     return true;
 }
 
 void TetrisModel::movePieceDown() {
     auto& piece = state.getCurrentPiece();
     if (!canMoveDown()) {
-        std::cerr << ("Collision detected while moving piece down. ");
+        return;
     }
     deleteCurrentPieceFromBoard();
     state.getCurrentPiece()->moveDown();
@@ -63,10 +91,8 @@ void TetrisModel::setCurrentPieceOnBoard() {
 void TetrisModel::movePieceLeft() {
     auto& piece = state.getCurrentPiece();
     if (isColliding(piece, 0, -1)) {
-        std::cerr << "Collision detected while moving piece left. ";
         return;
     }
-
         deleteCurrentPieceFromBoard();
         state.getCurrentPiece()->moveLeft();
         setCurrentPieceOnBoard();
@@ -76,7 +102,6 @@ void TetrisModel::movePieceLeft() {
 void TetrisModel::movePieceRight() {
     auto& piece = state.getCurrentPiece();
     if (isColliding(piece, 0, 1)) {
-        std::cerr << "Collision detected while moving piece right. ";
         return;
     }
 
@@ -91,7 +116,6 @@ void TetrisModel::dropPiece() {
     int dropCount = 0;
     while (true) {
         if (!canMoveDown()) {
-            std::cerr << "Collision detected while dropping piece. ";
             break;
         }
         movePieceDown();
@@ -117,7 +141,6 @@ void TetrisModel::rotatePiece(char dir) {
                     //Have to check it's not the position of the currentPiece so we avoid self piece collision
                     || (board.at(pieceNextRow, pieceNextCol) != piece
                         && board.at(pieceNextRow, pieceNextCol) != nullptr)) {
-                    std::cerr << "Collision detected while rotating piece. ";
                     return;
                 }
                 break; // Here the break is very important to update correctly deltaRow and deltaCol for each absPos
@@ -140,7 +163,6 @@ void TetrisModel::rotatePiece(char dir) {
                 if (!board.isInsideBoard(pieceNextRow, pieceNextCol)
                     || (board.at(pieceNextRow, pieceNextCol) != piece
                         && board.at(pieceNextRow, pieceNextCol) != nullptr)) {
-                    std::cerr << "Collision detected while rotating piece";
                     return;
                 }
                 break;
@@ -155,17 +177,17 @@ void TetrisModel::rotatePiece(char dir) {
 bool TetrisModel::isGameOver(){
     auto currentPiece = state.getCurrentPiece();
     if(!canMoveDown()) {
-        std::cerr << "Piece couldn't spawn. ";
+        std::cerr << "Next piece couldn't spawn. GAME OVER!";
         return true;
     }
 
     if (state.getScore() >= MAX_SCORE) {
-        std::cerr << "Maximum score reached. ";
+        std::cerr << "Maximum score reached. Well played! You have won the game.";
         return true;
     }
 
     if (totalCompletedLine >= MAX_COMPLETED_LINES) {
-        std::cerr << "You completed 100 lines. ";
+        std::cerr << "You completed 100 lines. You have won the game. Well played!";
         return true;
     }
 
@@ -173,7 +195,7 @@ bool TetrisModel::isGameOver(){
     auto currentTime = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsedTime = currentTime - startTime;
     if (elapsedTime.count() >= MAX_TIME_SECONDS) {
-        std::cerr << "Maximum time reached game is over";
+        std::cerr << "Maximum time reached. GAME OVER!";
         return true;
     }
     return false;
@@ -182,7 +204,6 @@ bool TetrisModel::isGameOver(){
 void TetrisModel::updateGame() {
     auto currentPiece = state.getCurrentPiece();
     if (!canMoveDown()) {
-        std::cerr << "Can't move down, updating game"; //Only for debug, will throws exception later
         int completedLine = board.clearCompletedLines();
         totalCompletedLine = completedLine;
         updateScore(completedLine);
@@ -192,7 +213,6 @@ void TetrisModel::updateGame() {
         }
         state.updateCurrentPiece(bag);
         spawnPiece();
-        startTime = std::chrono::steady_clock::now();
     }
 }
 

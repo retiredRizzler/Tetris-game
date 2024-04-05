@@ -24,10 +24,15 @@ add_executable(Tetris_projectTests
     ../src/model/GameBoard.cpp
     ../src/model/GameState.h
     ../src/model/GameState.cpp
+        ../src/model/TetrisModel.h
+        ../src/model/TetrisModel.cpp
+        ../src/model/observer.cpp
+        ../src/model/observable.cpp
 
     testGameBoard.cpp
     testPieceBag.cpp
     testPiece.cpp
+        testTetrisModel.cpp
 )
 target_include_directories(Tetris_projectTests PRIVATE
     ../src

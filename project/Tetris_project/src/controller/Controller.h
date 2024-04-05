@@ -7,7 +7,7 @@ class Controller {
 private:
     TetrisGame game;
 
-    static void askBoardSize(int& rows, int& cols);
+    void askBoardSize(int& rows, int& cols);
     void handleInput();
 
 public:

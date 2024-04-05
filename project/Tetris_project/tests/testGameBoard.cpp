@@ -184,6 +184,7 @@ TEST_CASE("clearCompletedLines completed line at bottom") {
     REQUIRE(numClearedLines == 1);
 }
 
+
 TEST_CASE("getPieceAt valid position with piece") {
     GameBoard board(5, 5);
     std::shared_ptr<Piece> piece = std::make_shared<LPiece>();
@@ -206,13 +207,10 @@ TEST_CASE("getPieceAt invalid position") {
 }
 
 TEST_CASE("getPieceAt empty position") {
-    // Arrange
     GameBoard board(5, 5);
 
-    // Act
     std::shared_ptr<Piece> emptyPiece = board.getPieceAt(1, 2);
 
-    // Assert
     REQUIRE(emptyPiece == nullptr);
 }
 
@@ -228,13 +226,6 @@ TEST_CASE("setPieceAt normal placement within bounds") {
     REQUIRE(piece->getCol() == 3);
 }
 
-TEST_CASE("setPieceAt throws exception for negative coordinates") {
-    GameBoard board(5, 5);
-    std::shared_ptr<Piece> piece = std::make_shared<LPiece>();
-
-    REQUIRE_THROWS_AS(board.setPieceAt(-1, 2, piece), std::out_of_range);
-}
-
 TEST_CASE("setPieceAt overwrites existing piece") {
     GameBoard board(5, 5);
     std::shared_ptr<Piece> piece1 = std::make_shared<LPiece>();
@@ -244,5 +235,74 @@ TEST_CASE("setPieceAt overwrites existing piece") {
     board.setPieceAt(3, 1, piece2);
 
     REQUIRE(board.getPieceAt(3, 1) == piece2);
+}
+
+TEST_CASE("clearCompletedLines completed lines at top of board") {
+    GameBoard board(5, 5);
+
+    // Placer des pièces pour compléter les premières lignes du plateau
+    for (int row = 0; row < 3; ++row) {
+        for (int col = 0; col < board.getCols(); ++col) {
+            board.setPieceAt(row, col, std::make_shared<LPiece>());
+        }
+    }
+
+    int numClearedLines = board.clearCompletedLines();
+
+    for (int row = 0; row < 3; ++row) {
+        for (int col = 0; col < board.getCols(); ++col) {
+            REQUIRE(board.getPieceAt(row, col) == nullptr);
+        }
+    }
+    REQUIRE(numClearedLines == 3);
+}
+TEST_CASE("clearCompletedLines two completed lines with piece movement") {
+    GameBoard board(5, 5);
+
+    for (int col = 0; col < board.getCols(); ++col) {
+        board.setPieceAt(1, col, std::make_shared<LPiece>());
+        board.setPieceAt(3, col, std::make_shared<LPiece>());
+    }
+
+    int numClearedLines = board.clearCompletedLines();
+
+    REQUIRE(board.getPieceAt(1, 0) == nullptr);
+    REQUIRE(board.getPieceAt(3, 0) == nullptr);
+
+    REQUIRE(numClearedLines == 2);
+}
+
+TEST_CASE("clearCompletedLines no completed lines2") {
+    GameBoard board(5, 5);
+
+    // Placer des pièces sans compléter aucune ligne
+    board.setPieceAt(1, 1, std::make_shared<LPiece>());
+    board.setPieceAt(2, 2, std::make_shared<LPiece>());
+
+    int numClearedLines = board.clearCompletedLines();
+
+    REQUIRE(board.getPieceAt(1, 1) != nullptr);
+    REQUIRE(board.getPieceAt(2, 2) != nullptr);
+
+
+    REQUIRE(numClearedLines == 0);
+}
+TEST_CASE("clearCompletedLines all lines completed") {
+    GameBoard board(5, 5);
+
+    // Placer des pièces pour compléter toutes les lignes
+    for (int row = 0; row < board.getRows(); ++row) {
+        for (int col = 0; col < board.getCols(); ++col) {
+            board.setPieceAt(row, col, std::make_shared<LPiece>());
+        }
+    }
+
+    int numClearedLines = board.clearCompletedLines();
+    for (int row = 0; row < board.getRows(); ++row) {
+        for (int col = 0; col < board.getCols(); ++col) {
+            REQUIRE(board.getPieceAt(row, col) == nullptr);
+        }
+    }
+    REQUIRE(numClearedLines == board.getRows());
 }
 

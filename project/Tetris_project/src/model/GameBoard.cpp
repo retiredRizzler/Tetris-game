@@ -1,5 +1,6 @@
 #include "GameBoard.h"
 #include <algorithm>
+#include <iostream>
 
 GameBoard::GameBoard(int rows, int cols) : rows(rows), cols(cols) {
     board.resize(rows, std::vector<std::shared_ptr<Piece>>(cols, nullptr));
@@ -17,6 +18,10 @@ void GameBoard::setBoard(int row, int col) {
     this->rows = row;
     this->cols = col;
     board.resize(rows, std::vector<std::shared_ptr<Piece>>(cols, nullptr));
+    // Resize each row to ensure correct number of columns
+    for (int i = 0; i < rows; ++i) {
+        board[i].resize(cols, nullptr);
+    }
 }
 
 std::shared_ptr<Piece> GameBoard::getPieceAt(int row, int col) const {
@@ -30,9 +35,9 @@ std::shared_ptr<Piece> GameBoard::getPieceAt(int row, int col) const {
 void GameBoard::setPieceAt(int row, int col, const std::shared_ptr<Piece>& piece) {
     // We skip this check because we need first to fit the piece within the board while spawning
     //See spawnPiece in TetrisModel
-    //if (!isInsideBoard(row, col)) {
-       // throw std::out_of_range("Tried to place a piece outside the board");
-    //}
+    if (!isInsideBoard(row, col)) {
+       std::cerr <<  "piece is not inside board";
+    }
     if (piece == nullptr) {
         throw std::runtime_error("Tried to set a nullptr piece with setPieceAt function");
     }

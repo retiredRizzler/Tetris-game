@@ -53,7 +53,7 @@ public:
         std::cout << std::endl;
 
         std::cout << "\033[1m";
-        std::cout << "  \033[32m Welcome \033[31m to \033[34mthe \033[36mTetris \033[33mgame !";
+        std::cout << "  \033[32m Welcome\033[31m to \033[34mthe \033[36mTetris \033[33mgame !";
         std::cout << "\033[0m" << std::endl;
 
         for (int i = 0; i < 40; ++i) {
@@ -63,6 +63,26 @@ public:
 
         std::cout << "\033[34mType any key command to continue..." << std::endl;
         std::cin.get();
+    }
+
+    /**
+ * @brief Displays the end message when the game is over.
+ */
+    void displayEnd() {
+        std::cout << std::endl;
+        std::cout << BOLD;
+
+        for (int i = 0; i < 40; ++i) { // Assuming BOARD_COLS is defined in TetrisModel.h
+            std::cout << MAGENTA << "=";
+        }
+        std::cout << std::endl;
+
+        std::cout << BOLD << GREEN << "     End of the game, See you soon!" << RESET << std::endl;
+
+        for (int i = 0; i < 40; ++i) { // Assuming BOARD_COLS is defined in TetrisModel.h
+            std::cout << MAGENTA << "=";
+        }
+        std::cout << std::endl << std::endl;
     }
 
     void displayCommands() {
@@ -93,7 +113,7 @@ public:
         for (int i = 0; i < board.getCols() + 2; ++i) {
             std::cout << BOLD <<  "#" << RESET;
         }
-
+        std::cout << std::endl;
         for (int row = 0; row < board.getRows(); ++row) {
             std::cout << BOLD << "#" << RESET;
             for (int col = 0; col < board.getCols(); ++col) {
@@ -181,6 +201,8 @@ public:
         const GameState& state = model->getState();
         std::cout << "\033[1m" << GREEN << "Current Score: " << state.getScore() << RESET << std::endl;
     }
+
+
 
 };
 

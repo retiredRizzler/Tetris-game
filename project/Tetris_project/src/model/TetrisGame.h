@@ -30,6 +30,11 @@ public:
     void start();
 
     /**
+     * @brief Fill the board with random pieces.
+     */
+    void fillBoardWithRandomPieces();
+
+    /**
      * @brief Ends the Tetris game.
      */
     void end();

@@ -30,6 +30,11 @@ public:
     void startGame();
 
     /**
+     * Prefills the board with random pieces
+     */
+    void fillBoardWithRandomPieces();
+
+    /**
     * @brief Spawns the current piece onto the game board, ensuring it is entirely inside the board.
     */
     void spawnPiece();
@@ -125,9 +130,9 @@ private:
      */
     void updateScore(int completedLine);
 
-    const int MAX_SCORE = 50000; /**< The maximum score allowed. */
+    const int MAX_SCORE = 100000; /**< The maximum score allowed. */
     const int MAX_COMPLETED_LINES = 100; /**< The maximum number of completed lines allowed. */
-    const int MAX_TIME_SECONDS = 300; /**< The maximum time limit for the game (in seconds). */
+    const int MAX_TIME_SECONDS = 1800; /**< The maximum time limit for the game (in seconds). */
     std::chrono::steady_clock::time_point startTime; /**< The start time of the game. */
 };
 

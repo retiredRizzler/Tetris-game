@@ -5,6 +5,7 @@ Controller::Controller() : game(10, 20) {}
 void Controller::run() {
     int rows, cols;
     char choice;
+    game.getView().displayWelcome();
     std::cout << "Do you want to specify the board size? (y/n): ";
     std::cin >> choice;
     if (choice == 'y' || choice == 'Y') {
@@ -76,6 +77,7 @@ void Controller::handleInput() {
         game.dropPiece();
         break;
     default:
+        game.getView().displayMessage("Unknown command");
         game.getView().displayCommands();
     }
 }

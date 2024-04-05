@@ -3,7 +3,6 @@
 TetrisGame::TetrisGame(int boardRow, int boardCol) : model(boardRow, boardCol) {}
 
 void TetrisGame::start() {
-    view.displayWelcome();
     model.registerObserver(&view);
     model.startGame();
 }

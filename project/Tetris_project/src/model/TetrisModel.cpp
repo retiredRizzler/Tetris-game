@@ -2,26 +2,25 @@
 
 TetrisModel::TetrisModel(int boardRow, int boardCol) :
     board(boardRow,boardCol), bag(5),
-    state(0, bag.getNextPiece(), 1), totalCompletedLine(0){
+    state(0, bag.getNextPiece(), 1) {}
+
+void TetrisModel::startGame() {
+    spawnPiece();
     dropScore = 0;
     totalCompletedLine = 0;
-}
-
-void TetrisModel:: startGame() {
-    spawnPiece();
     startTime = std::chrono::steady_clock::now();
 }
 
 void TetrisModel::spawnPiece() {
     auto& piece = state.getCurrentPiece();
 
-    int spawnRow = 1;
+    int spawnRow = 0;
     int spawnCol = board.getCols() / 2;
     board.setPieceAt(spawnRow, spawnCol, piece);
 
-    // Move the piece down until it's completely in the board
+    // Move the piece down until it's completely within the board
     while (!pieceCompletelyInsideBoard()) {
-        movePieceDown();
+        state.getCurrentPiece()->moveDown();
     }
     setCurrentPieceOnBoard();
 }
@@ -41,7 +40,7 @@ bool TetrisModel::pieceCompletelyInsideBoard() {
 void TetrisModel::movePieceDown() {
     auto& piece = state.getCurrentPiece();
     if (!canMoveDown()) {
-        std::cerr << ("Collision detected while moving piece down");
+        std::cerr << ("Collision detected while moving piece down. ");
     }
     deleteCurrentPieceFromBoard();
     state.getCurrentPiece()->moveDown();
@@ -64,7 +63,7 @@ void TetrisModel::setCurrentPieceOnBoard() {
 void TetrisModel::movePieceLeft() {
     auto& piece = state.getCurrentPiece();
     if (isColliding(piece, 0, -1)) {
-        std::cerr << "Collision detected while moving piece left";
+        std::cerr << "Collision detected while moving piece left. ";
         return;
     }
 
@@ -77,7 +76,7 @@ void TetrisModel::movePieceLeft() {
 void TetrisModel::movePieceRight() {
     auto& piece = state.getCurrentPiece();
     if (isColliding(piece, 0, 1)) {
-        std::cerr << "Collision detected while moving piece right";
+        std::cerr << "Collision detected while moving piece right. ";
         return;
     }
 
@@ -92,7 +91,7 @@ void TetrisModel::dropPiece() {
     int dropCount = 0;
     while (true) {
         if (!canMoveDown()) {
-            std::cerr << "Collision detected while dropping piece";
+            std::cerr << "Collision detected while dropping piece. ";
             break;
         }
         movePieceDown();
@@ -106,6 +105,7 @@ void TetrisModel::dropPiece() {
 void TetrisModel::rotatePiece(char dir) {
     auto& piece = state.getCurrentPiece();
     std::vector<std::vector<int>> rotationMatrix = piece->getRotationMatrix();// source : Gemini (google AI)
+    //rotate clockwise
     if (dir == 'r') {
         for (const auto &piecePos: piece->getShape()) {
             int deltaRow = rotationMatrix[0][0] * piecePos.getX() + rotationMatrix[0][1] * piecePos.getY();
@@ -114,10 +114,10 @@ void TetrisModel::rotatePiece(char dir) {
                 int pieceNextRow = absPos.getX() + deltaRow;
                 int pieceNextCol = absPos.getY() + deltaCol;
                 if (!board.isInsideBoard(pieceNextRow, pieceNextCol)
-                    //Have to check it's not the position of the currentPiece
+                    //Have to check it's not the position of the currentPiece so we avoid self piece collision
                     || (board.at(pieceNextRow, pieceNextCol) != piece
                         && board.at(pieceNextRow, pieceNextCol) != nullptr)) {
-                    std::cerr << "Collision detected while rotating piece";
+                    std::cerr << "Collision detected while rotating piece. ";
                     return;
                 }
                 break; // Here the break is very important to update correctly deltaRow and deltaCol for each absPos
@@ -126,7 +126,10 @@ void TetrisModel::rotatePiece(char dir) {
         deleteCurrentPieceFromBoard();
         piece->rotateClockwise();
         setCurrentPieceOnBoard();
+
+        //Same logic for rotate counterclockwise
     } else {
+        //negate the matrix to rotate counterclockwise, source : Gemini
         piece->negateMatrix(rotationMatrix);
         for (const auto &piecePos: piece->getShape()) {
             int deltaRow = rotationMatrix[0][0] * piecePos.getX() + rotationMatrix[0][1] * piecePos.getY();
@@ -135,13 +138,12 @@ void TetrisModel::rotatePiece(char dir) {
                 int pieceNextRow = absPos.getX() + deltaRow;
                 int pieceNextCol = absPos.getY() + deltaCol;
                 if (!board.isInsideBoard(pieceNextRow, pieceNextCol)
-                    //Have to check it's not the position of the currentPiece
                     || (board.at(pieceNextRow, pieceNextCol) != piece
                         && board.at(pieceNextRow, pieceNextCol) != nullptr)) {
                     std::cerr << "Collision detected while rotating piece";
                     return;
                 }
-                break; // Here the break is very important to update correctly deltaRow and deltaCol for each absPos
+                break;
             }
         }
         deleteCurrentPieceFromBoard();
@@ -152,15 +154,18 @@ void TetrisModel::rotatePiece(char dir) {
 
 bool TetrisModel::isGameOver(){
     auto currentPiece = state.getCurrentPiece();
-    //if (isColliding(currentPiece, 0, currentPiece->getCol())) { Have to fix it -> easy
-    //    return true;
-    //}
+    if(!canMoveDown()) {
+        std::cerr << "Piece couldn't spawn. ";
+        return true;
+    }
 
     if (state.getScore() >= MAX_SCORE) {
+        std::cerr << "Maximum score reached. ";
         return true;
     }
 
     if (totalCompletedLine >= MAX_COMPLETED_LINES) {
+        std::cerr << "You completed 100 lines. ";
         return true;
     }
 
@@ -187,6 +192,7 @@ void TetrisModel::updateGame() {
         }
         state.updateCurrentPiece(bag);
         spawnPiece();
+        startTime = std::chrono::steady_clock::now();
     }
 }
 
@@ -231,14 +237,6 @@ void TetrisModel::updateScore(int completedLine) {
     state.incrementScore(computedScore);
 }
 
-/**
- * @brief Checks if a piece collides with the board or other pieces.
- *
- * @param piece A shared pointer to the `Piece` object to be checked for collision.
- * @param row The intended row position where the piece should be placed.
- * @param col The intended column position where the piece should be placed.
- * @return `true` if there is a collision, `false` otherwise.
- */
 bool TetrisModel::isColliding(const std::shared_ptr<Piece>& piece, int deltaRow, int deltaCol) const {
     for (const Position& piecePos : piece->getAbsolutePositions()) {
         int pieceNextRow = piecePos.getX() + deltaRow;

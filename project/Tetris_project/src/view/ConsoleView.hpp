@@ -61,22 +61,28 @@ public:
         }
         std::cout << std::endl << std::endl;
 
-        std::cout << "\033[34mPress a key command to make a move..." << std::endl;
+        std::cout << "\033[34mType any key command to continue..." << std::endl;
         std::cin.get();
     }
 
     void displayCommands() {
         std::cout << "\n\033[1mTetris Commands:\033[0m\n";
-        std::cout << "r - Rotate the current piece clockwise.\n";
-        std::cout << "a - Rotate the current piece counter-clockwise.\n";
-        std::cout << "q - Move the current piece left.\n";
-        std::cout << "s - Move the current piece down.\n";
-        std::cout << "d - Move the current piece right.\n";
-        std::cout << "x - Drop the current piece to the bottom.\n";
+        std::cout << "r - Rotate the piece clockwise.\n";
+        std::cout << "a - Rotate the piece counter-clockwise.\n";
+        std::cout << "q - Move the piece left.\n";
+        std::cout << "s - Move the piece down.\n";
+        std::cout << "d - Move the piece right.\n";
+        std::cout << "x - Drop the piece to the bottom of the board.\n";
         std::cout << "Enter your command: " << std::endl;
     }
+    /**
+     * @brief Displays a message
+     * @param message message to display on the screen
+     */
+    void displayMessage(const std::string& message) {
+        std::cout << RED <<  message << std::endl;
+    }
 
-private:
     /**
      * @brief Displays the game board.
      * @param model Pointer to the TetrisModel object.
@@ -85,12 +91,11 @@ private:
         std::cout << std::endl;
         const GameBoard& board = model->getBoard();
         for (int i = 0; i < board.getCols() + 2; ++i) {
-            std::cout << "#";
+            std::cout << BOLD <<  "#" << RESET;
         }
-        std::cout << std::endl;
 
         for (int row = 0; row < board.getRows(); ++row) {
-            std::cout << "#";
+            std::cout << BOLD << "#" << RESET;
             for (int col = 0; col < board.getCols(); ++col) {
                 std::shared_ptr<Piece> piece = board.getPieceAt(row, col);
                 if (piece != nullptr) {
@@ -99,12 +104,59 @@ private:
                     std::cout << " ";
                 }
             }
-            std::cout << "#" << std::endl;
+            std::cout << BOLD << "#" << RESET << std::endl;
         }
         for (int i = 0; i < board.getCols() + 2; ++i) {
-            std::cout << "#";
+            std::cout << BOLD << "#" << RESET;
         }
         std::cout << std::endl;
+    }
+
+/**
+ * @brief Displays the next piece to be played.
+ * @param model Pointer to the TetrisModel object.
+ */
+    void displayNextPiece(TetrisModel* model) {
+        std::cout << "\nNext Piece:\n";
+
+        // Get the next piece from the model
+        std::shared_ptr<Piece> nextPiece = model->getState().getNextPiece();
+
+        // Display the next piece
+        if (nextPiece != nullptr) {
+            const std::vector<Position>& shape = nextPiece->getShape();
+
+            // Find dimensions of the piece
+            int minX = INT_MAX, maxX = INT_MIN, minY = INT_MAX, maxY = INT_MIN;
+            for (const auto& pos : shape) {
+                minX = std::min(minX, pos.getX());
+                maxX = std::max(maxX, pos.getX());
+                minY = std::min(minY, pos.getY());
+                maxY = std::max(maxY, pos.getY());
+            }
+
+            // Display the piece
+            for (int y = minY; y <= maxY; ++y) {
+                for (int x = minX; x <= maxX; ++x) {
+                    bool occupied = false;
+                    for (const auto& pos : shape) {
+                        if (pos.getX() == x && pos.getY() == y) {
+                            occupied = true;
+                            break;
+                        }
+                    }
+                    if (occupied) {
+                        std::cout << "X"; // Occupied cell
+                    } else {
+                        std::cout << " "; // Empty cell
+                    }
+                }
+                std::cout << std::endl;
+            }
+        } else {
+            std::cout << "No next piece available." << std::endl;
+        }
+
     }
 
     /**
@@ -127,8 +179,9 @@ private:
      */
     void displayScore(TetrisModel* model) {
         const GameState& state = model->getState();
-        std::cout << "\033[1m" << GREEN << "Current Score: " << state.getScore() << "\033[0m" << std::endl;
+        std::cout << "\033[1m" << GREEN << "Current Score: " << state.getScore() << RESET << std::endl;
     }
+
 };
 
 #endif // CONSOLEVIEW_HPP

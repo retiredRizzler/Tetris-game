@@ -165,15 +165,21 @@ void GUIController::stopTimers(){
 }
 
 void GUIController::playButtonHandler(){
+
     int width = startWindow.getWidthSpinBox();
     int height = startWindow.getHeightSpinBox();
     bool prefilled = startWindow.getPrefilledChoice();
     //model.resetGame(width, height, !prefilled);
+
+    if (prefilled) {
+        model.fillBoardWithRandomPieces();
+    }
     model.startGame();
 
     timerInterval.setInterval((1000/60) * getSpeed());
     timerInterval.start();
     timerDuration.start(model.getTimeDuration()*1000);
+
 
     startWindow.close();
     mainWindow.show();

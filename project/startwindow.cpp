@@ -12,7 +12,8 @@ StartWindow::StartWindow(QWidget *parent)
 }
 
 int StartWindow::getWidthSpinBox() const{
-    return ui->groupBox->findChild<QSpinBox *>("widthSpinBox") -> value();
+    //return ui->groupBox->findChild<QSpinBox *>("widthSpinBox") -> value();
+    return 2;
 }
 
 int StartWindow::getHeightSpinBox() const{

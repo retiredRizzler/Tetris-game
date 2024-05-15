@@ -39,7 +39,7 @@
       <string>Width</string>
      </property>
     </widget>
-    <widget class="QSpinBox" name="widthSpinBox_2">
+    <widget class="QSpinBox" name="widthSpinBox">
      <property name="geometry">
       <rect>
        <x>190</x>

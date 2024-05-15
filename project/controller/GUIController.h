@@ -1,0 +1,4 @@
+#ifndef GUICONTROLLER_H
+#define GUICONTROLLER_H
+
+#endif // GUICONTROLLER_H

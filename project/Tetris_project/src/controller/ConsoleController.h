@@ -2,7 +2,7 @@
 #define CONTROLLER_H
 #include "../model/TetrisGame.h"
 
-class Controller {
+class ConsoleController {
 
 private:
     TetrisGame game;
@@ -11,7 +11,7 @@ private:
     void handleInput();
 
 public:
-    Controller();
+    ConsoleController();
     void run();
 };
 

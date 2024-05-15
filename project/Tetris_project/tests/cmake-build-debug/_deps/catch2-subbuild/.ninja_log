@@ -1,0 +1,21 @@
+# ninja log v5
+3	63	7374213097129614	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-mkdir	71794cc82b4367f3
+3	63	7374213097129614	C:/Users/rarad/Desktop/ESI/BLOC 2/q2/DEV4/TetristGame_projectESI/tetris_project-rayan-umut/project/Tetris_project/tests/cmake-build-debug/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-mkdir	71794cc82b4367f3
+64	8437	7374213180864852	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-download	574008800fe1319b
+64	8437	7374213180864852	C:/Users/rarad/Desktop/ESI/BLOC 2/q2/DEV4/TetristGame_projectESI/tetris_project-rayan-umut/project/Tetris_project/tests/cmake-build-debug/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-download	574008800fe1319b
+8437	8549	0	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-update	a968c1fd5972931e
+8437	8549	0	C:/Users/rarad/Desktop/ESI/BLOC 2/q2/DEV4/TetristGame_projectESI/tetris_project-rayan-umut/project/Tetris_project/tests/cmake-build-debug/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-update	a968c1fd5972931e
+8549	8606	7374213182555085	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-patch	1b76e86c3adce3ce
+8549	8606	7374213182555085	C:/Users/rarad/Desktop/ESI/BLOC 2/q2/DEV4/TetristGame_projectESI/tetris_project-rayan-umut/project/Tetris_project/tests/cmake-build-debug/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-patch	1b76e86c3adce3ce
+8606	8660	7374213183107077	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-configure	e2849d6f3748309e
+8606	8660	7374213183107077	C:/Users/rarad/Desktop/ESI/BLOC 2/q2/DEV4/TetristGame_projectESI/tetris_project-rayan-umut/project/Tetris_project/tests/cmake-build-debug/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-configure	e2849d6f3748309e
+8660	8711	7374213183612951	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-build	4afc0fe03fb261cd
+8660	8711	7374213183612951	C:/Users/rarad/Desktop/ESI/BLOC 2/q2/DEV4/TetristGame_projectESI/tetris_project-rayan-umut/project/Tetris_project/tests/cmake-build-debug/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-build	4afc0fe03fb261cd
+8711	8759	7374213184095589	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-install	34a925f968e0c225
+8711	8759	7374213184095589	C:/Users/rarad/Desktop/ESI/BLOC 2/q2/DEV4/TetristGame_projectESI/tetris_project-rayan-umut/project/Tetris_project/tests/cmake-build-debug/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-install	34a925f968e0c225
+8759	8805	7374213184555476	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-test	ec38ab4e07a3039b
+8759	8805	7374213184555476	C:/Users/rarad/Desktop/ESI/BLOC 2/q2/DEV4/TetristGame_projectESI/tetris_project-rayan-umut/project/Tetris_project/tests/cmake-build-debug/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-test	ec38ab4e07a3039b
+8805	8881	7374213185305496	CMakeFiles/catch2-populate-complete	1bafc9f41e2394e5
+8805	8881	7374213185305496	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-done	1bafc9f41e2394e5
+8805	8881	7374213185305496	C:/Users/rarad/Desktop/ESI/BLOC 2/q2/DEV4/TetristGame_projectESI/tetris_project-rayan-umut/project/Tetris_project/tests/cmake-build-debug/_deps/catch2-subbuild/CMakeFiles/catch2-populate-complete	1bafc9f41e2394e5
+8805	8881	7374213185305496	C:/Users/rarad/Desktop/ESI/BLOC 2/q2/DEV4/TetristGame_projectESI/tetris_project-rayan-umut/project/Tetris_project/tests/cmake-build-debug/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-done	1bafc9f41e2394e5

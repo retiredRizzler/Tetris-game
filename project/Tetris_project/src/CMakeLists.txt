@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
+set(CMAKE_PREFIX_PATH "C:/Qt/6.6.2/mingw_64/lib/cmake")
 
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+qt_standard_project_setup()
 
 add_executable(Tetris_project
         model/pieces/ZPiece.cpp
@@ -31,16 +35,21 @@ add_executable(Tetris_project
     model/Observable.h
     model/Observable.cpp
     model/observer.h model/observer.cpp
-    controller/Controller.h
-    controller/Controller.cpp
+        controller/ConsoleController.h
+        controller/ConsoleController.cpp
     model/TetrisGame.h
     model/TetrisGame.cpp
-    TetrisApp.cpp
-
-
+        TetrisApp.cpp
+        gui/GameBoardWidget.cpp
+        gui/GameWindow.cpp
+        gui/mainwindow.cpp
+        gui/ConfigWindow.cpp
+        gui/ConfigWindow.h
 
 
 )
+
+target_link_libraries(Tetris_project PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 install(TARGETS Tetris_project
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})

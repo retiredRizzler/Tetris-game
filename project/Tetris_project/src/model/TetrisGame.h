@@ -3,6 +3,7 @@
 
 #include "TetrisModel.h" // Include necessary headers
 #include "../view/ConsoleView.hpp"
+#include "../gui/GameWindow.h"
 
 /**
  * @class TetrisGame
@@ -15,6 +16,7 @@ class TetrisGame {
 private:
     TetrisModel model; /**< The Tetris model containing the game state and logic. */
     ConsoleView view; /**< The console view for displaying the game. */
+    //GameWindow gameWindow;
 
 public:
     /**
@@ -76,6 +78,8 @@ public:
      */
     void updateGame();
 
+    GameState& getState();
+
     /**
      * @brief Gets a reference to the game board.
      * @return A reference to the game board.
@@ -87,6 +91,12 @@ public:
      * @return A reference to the game view
      */
     ConsoleView& getView();
+
+    /**
+     * @brief Gets a reference to the game window (for gui)
+     * @return A reference to the game window (for gui)
+     */
+    //GameWindow* getGameWindow();
 };
 
 #endif // TETRISGAME_H

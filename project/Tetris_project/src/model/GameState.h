@@ -46,6 +46,12 @@ public:
     int getCurrentLevel() const;
 
     /**
+     * @brief Sets the level of the game
+     * @param level the level to set
+     */
+    void setCurrentLevel(int level);
+
+    /**
      * @brief Gets the next piece that will appear on the game board.
      * @return A reference to the next piece.
      */

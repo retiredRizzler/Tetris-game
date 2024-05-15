@@ -1,8 +1,8 @@
-#include "Controller.h"
+#include "ConsoleController.h"
 
-Controller::Controller() : game(10, 20) {}
+ConsoleController::ConsoleController() : game(10, 20) {}
 
-void Controller::run() {
+void ConsoleController::run() {
     int rows, cols;
     char choice;
     game.getView().displayWelcome();
@@ -29,7 +29,7 @@ void Controller::run() {
     game.getView().displayEnd();
 }
 
-void Controller::askBoardSize(int& rows, int& cols) {
+void ConsoleController::askBoardSize(int& rows, int& cols) {
     //source chat.openai.com for robustness
     while (true) {
         game.getView().displayMessage("Enter the number of rows for the game board (between 5 and 30 included): ");
@@ -60,7 +60,7 @@ void Controller::askBoardSize(int& rows, int& cols) {
     }
 }
 
-void Controller::handleInput() {
+void ConsoleController::handleInput() {
     // Handle user input and update game accordingly
     char userInput;
     std::cin >> userInput;

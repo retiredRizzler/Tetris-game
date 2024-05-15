@@ -16,6 +16,10 @@ int GameState::getCurrentLevel() const {
     return currentLevel;
 }
 
+void GameState::setCurrentLevel(int level) {
+    currentLevel = level;
+}
+
 const std::shared_ptr<Piece>& GameState::getNextPiece() const {
     return nextPiece;
 }

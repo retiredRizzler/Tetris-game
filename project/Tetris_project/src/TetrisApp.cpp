@@ -1,7 +1,14 @@
-#include "controller/Controller.h"
+#include "gui/mainwindow.h"
 
-int main()
+#include <QApplication>
+#include "controller/ConsoleController.h"
+
+int main(int argc, char *argv[])
 {
-    Controller game;
-    game.run();
+   // QApplication a(argc, argv);
+   // MainWindow w;
+   // w.show();
+    //return a.exec();
+    ConsoleController ctr;
+    ctr.run();
 }

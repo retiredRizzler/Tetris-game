@@ -53,6 +53,14 @@ GameBoard& TetrisGame::getGameBoard() {
     return model.getBoard();
 }
 
+GameState& TetrisGame::getState() {
+    return model.getState();
+}
+
 ConsoleView& TetrisGame::getView() {
     return view;
 }
+
+//GameWindow* TetrisGame::getGameWindow() {
+ //   return gameWindow;
+//}

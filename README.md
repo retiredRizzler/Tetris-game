@@ -1,5 +1,7 @@
 # Tetris Game Project
 
+![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)
+
 ## Introduction
 This Tetris game project is being developed as part of the DEV4 course by Umut and Rayan from the D112 group. The project aims to implement a classic Tetris game using C++.
 
@@ -11,7 +13,7 @@ This Tetris game project is being developed as part of the DEV4 course by Umut a
 Tetris is a classic puzzle game where the player arranges falling tetrominoes (shapes made up of four square blocks) to form complete rows. When a row is complete, it is cleared from the board, and the player earns points. The game ends when the stack of tetrominoes reaches the top of the playing area.
 
 ## Development Status
-The project is now playable and works in console mode. Graphical user interface (GUI) development will begin soon. 
+The project is now playable and works in console mode. 
 
 ## Known Bugs
 - **Ghost Piece Block**: Occasionally, when a new piece spawns, a ghost piece block may also appear. This block is a visual glitch and can be resolved by moving the piece to the right.
